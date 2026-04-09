@@ -7,7 +7,7 @@
 
   <!-- ═══════════════════════════════════════════════════════
        Minora loaded ONLY from jsDelivr CDN — no local files
-       Change @latest to @v0.1.0 for pinned production
+       Replace "username" with your actual GitHub username
        ═══════════════════════════════════════════════════════ -->
   <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.css">
@@ -99,7 +99,26 @@
       margin-bottom: var(--space-3);
     }
 
-    /* Verification result */
+    .trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      border-radius: var(--radius-sm);
+      border: var(--border-width) solid var(--color-neutral-200);
+      background: #ffffff;
+      color: var(--color-neutral-700);
+      cursor: pointer;
+    }
+
+    .trigger-btn:hover {
+      border-color: var(--color-neutral-300);
+      background: var(--color-neutral-50);
+    }
+
     .verify-result {
       text-align: center;
       padding: var(--space-8);
@@ -114,20 +133,14 @@
       margin-bottom: var(--space-2);
     }
 
-    .verify-result.pass h2 {
-      color: var(--color-success);
-    }
-
-    .verify-result.fail h2 {
-      color: var(--color-error);
-    }
+    .verify-result.pass h2 { color: var(--color-success); }
+    .verify-result.fail h2 { color: var(--color-error); }
 
     .verify-result p {
       font-size: var(--text-sm);
       color: var(--color-neutral-500);
     }
 
-    /* CDN info */
     .cdn-info {
       text-align: center;
       font-size: var(--text-xs);
@@ -153,7 +166,7 @@
         <span class="test-status loading" id="status-button">Loading</span>
       </div>
       <div class="test-desc">Tests: button styles, variant colors, focus ring</div>
-      <div style="display:flex; gap:var(--space-3); flex-wrap:wrap; align-items:center;">
+      <div style="display:flex; gap:var(--space-3); flex-wrap:wrap;">
         <button class="btn btn-primary btn-md">Primary</button>
         <button class="btn btn-outline-primary btn-md">Outline</button>
         <button class="btn btn-ghost-primary btn-md">Ghost</button>
@@ -168,11 +181,8 @@
         <span class="test-status loading" id="status-badge">Loading</span>
       </div>
       <div class="test-desc">Tests: badge variants, dot indicators, semantic colors</div>
-      <div style="display:flex; gap:var(--space-3); flex-wrap:wrap; align-items:center;">
-        <span class="badge badge-success badge-md">
-          <span class="badge-dot"></span>
-          Active
-        </span>
+      <div style="display:flex; gap:var(--space-3); flex-wrap:wrap;">
+        <span class="badge badge-success badge-md"><span class="badge-dot"></span> Active</span>
         <span class="badge badge-warning badge-md">Pending</span>
         <span class="badge badge-error badge-md">Failed</span>
         <span class="badge badge-subtle-info badge-md">Info</span>
@@ -203,16 +213,11 @@
     <!-- Test 4: Toast -->
     <div class="test-card">
       <div class="test-card-header">
-        <span class="test-card-title">Toast (JS required)</span>
+        <span class="test-card-title">Toast (JS)</span>
         <span class="test-status loading" id="status-toast">Loading</span>
       </div>
       <div class="test-desc">Tests: ToastManager JS module, animation, auto-dismiss</div>
-      <button class="trigger-btn" onclick="runToastTest()" style="
-        display:inline-flex; align-items:center; gap:var(--space-2);
-        padding:var(--space-2) var(--space-4);
-        font-family:var(--font-sans); font-size:var(--text-sm); font-weight:var(--font-medium);
-        border-radius:var(--radius-sm); border:var(--border-width) solid var(--color-neutral-200);
-        background:#ffffff; color:var(--color-neutral-700); cursor:pointer;">
+      <button class="trigger-btn" onclick="runToastTest()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:var(--space-4);height:var(--space-4);">
           <polygon points="5 3 19 12 5 21 5 3"></polygon>
         </svg>
@@ -223,16 +228,11 @@
     <!-- Test 5: Modal -->
     <div class="test-card">
       <div class="test-card-header">
-        <span class="test-card-title">Modal (JS required)</span>
+        <span class="test-card-title">Modal (JS)</span>
         <span class="test-status loading" id="status-modal">Loading</span>
       </div>
       <div class="test-desc">Tests: ModalManager JS, focus trap, scroll lock, animation</div>
-      <button class="trigger-btn" onclick="runModalTest()" style="
-        display:inline-flex; align-items:center; gap:var(--space-2);
-        padding:var(--space-2) var(--space-4);
-        font-family:var(--font-sans); font-size:var(--text-sm); font-weight:var(--font-medium);
-        border-radius:var(--radius-sm); border:var(--border-width) solid var(--color-neutral-200);
-        background:#ffffff; color:var(--color-neutral-700); cursor:pointer;">
+      <button class="trigger-btn" onclick="runModalTest()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:var(--space-4);height:var(--space-4);">
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
           <line x1="9" y1="9" x2="15" y2="15"></line>
@@ -266,20 +266,21 @@
       </div>
       <div class="modal-body">
         <p style="font-size:var(--text-sm);color:var(--color-neutral-600);line-height:var(--leading-relaxed);">
-          If you can see this modal with proper styling, the Minora Modal JS and CSS loaded correctly from CDN. Press Escape or click outside to close.
+          If you can see this modal with proper styling, Minora loaded correctly from CDN. Press Escape or click outside to close.
         </p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary btn-md" onclick="ModalManager.close('cdn-modal-test')">Close</button>
-        <button class="btn btn-primary btn-md" onclick="ModalManager.close('cdn-modal-test');ToastManager.show({type:'success',message:'Modal closed successfully!'})">Confirm</button>
+        <button class="btn btn-primary btn-md" onclick="ModalManager.close('cdn-modal-test');ToastManager.show({type:'success',message:'Modal closed!'})">Confirm</button>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════
-       CDN Test Script
-       ═══════════════════════════════════════════════════════ -->
-  <script src="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.js"></script>
+  <!-- JS from CDN — uses onload/onerror for reliable detection -->
+  <script src="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.js"
+          onload="onJsLoaded()"
+          onerror="onJsFailed()"></script>
+
   <script>
     (function() {
       'use strict';
@@ -287,69 +288,47 @@
       var results = { button: false, badge: false, input: false, toast: false, modal: false };
       var total = 5;
       var passed = 0;
+      var jsReady = false;
 
-      // CDN info
-      var infoEl = document.getElementById('cdn-info');
-      infoEl.textContent = 'Loaded from: cdn.jsdelivr.net/gh/username/minora@latest/dist/';
+      document.getElementById('cdn-info').textContent =
+        'Source: cdn.jsdelivr.net/gh/username/minora@latest/dist/';
 
-      // 1. Button test — check if .btn class styles are applied
+      /* ─── CSS Tests (run immediately) ─── */
       function testButton() {
         var btn = document.querySelector('.btn');
-        if (!btn) { setStatus('button', false); return; }
-        var style = window.getComputedStyle(btn);
-        // Check if display is flex (set in CSS)
-        if (style.display === 'inline-flex') {
-          setStatus('button', true);
-        } else {
-          setStatus('button', false);
-        }
+        setStatus('button', btn && getComputedStyle(btn).display === 'inline-flex');
       }
 
-      // 2. Badge test — check if badge styles are applied
       function testBadge() {
         var badge = document.querySelector('.badge');
-        if (!badge) { setStatus('badge', false); return; }
-        var style = window.getComputedStyle(badge);
-        if (style.display === 'inline-flex' && style.borderRadius) {
-          setStatus('badge', true);
-        } else {
-          setStatus('badge', false);
-        }
+        var style = badge ? getComputedStyle(badge) : {};
+        setStatus('badge', badge && style.display === 'inline-flex' && style.borderRadius);
       }
 
-      // 3. Input test — check if input styles are applied
       function testInput() {
         var input = document.querySelector('.input');
-        if (!input) { setStatus('input', false); return; }
-        var style = window.getComputedStyle(input);
-        if (style.border && style.fontFamily) {
-          setStatus('input', true);
-        } else {
-          setStatus('input', false);
-        }
+        var style = input ? getComputedStyle(input) : {};
+        setStatus('input', input && style.border && style.border !== 'none');
       }
 
-      // 4. Toast test — check if ToastManager is available
+      /* ─── JS Tests (run only after CDN JS confirms loaded) ─── */
       function testToast() {
-        if (typeof ToastManager !== 'undefined' && typeof ToastManager.show === 'function') {
-          setStatus('toast', true);
-        } else {
-          setStatus('toast', false);
-        }
+        setStatus('toast',
+          typeof window.ToastManager !== 'undefined' &&
+          typeof window.ToastManager.show === 'function'
+        );
       }
 
-      // 5. Modal test — check if ModalManager is available
       function testModal() {
-        if (typeof ModalManager !== 'undefined' && typeof ModalManager.open === 'function') {
-          setStatus('modal', true);
-        } else {
-          setStatus('modal', false);
-        }
+        setStatus('modal',
+          typeof window.ModalManager !== 'undefined' &&
+          typeof window.ModalManager.open === 'function'
+        );
       }
 
       function setStatus(name, pass) {
         var el = document.getElementById('status-' + name);
-        if (!el) return;
+        if (!el || results[name] !== undefined) return;
         results[name] = pass;
         if (pass) {
           passed++;
@@ -363,46 +342,58 @@
       }
 
       function checkAll() {
-        var allDone = Object.keys(results).every(function(k) {
-          return results[k] !== undefined;
-        });
-        if (!allDone) return;
+        var done = Object.values(results).every(function(v) { return v !== undefined; });
+        if (!done) return;
 
-        var resultEl = document.getElementById('verify-result');
+        var el = document.getElementById('verify-result');
         if (passed === total) {
-          resultEl.className = 'verify-result pass';
-          resultEl.innerHTML = '<h2>✓ All 5 Tests Passed</h2><p>Minora CDN is working correctly. All components loaded successfully.</p>';
+          el.className = 'verify-result pass';
+          el.innerHTML = '<h2>✓ All 5 Tests Passed</h2><p>Minora CDN is working correctly.</p>';
         } else {
-          resultEl.className = 'verify-result fail';
-          resultEl.innerHTML = '<h2>✗ ' + (total - passed) + ' Test(s) Failed</h2><p>' +
-            passed + '/' + total + ' components loaded. Check the CDN URL and try again.</p>';
+          el.className = 'verify-result fail';
+          el.innerHTML = '<h2>✗ ' + (total - passed) + ' Failed</h2><p>' +
+            passed + '/' + total + ' loaded. Replace "username" in CDN URLs with your GitHub username.</p>';
         }
       }
 
-      // Run tests after DOM ready
+      /* ─── Called by script tag onload ─── */
+      window.onJsLoaded = function() {
+        jsReady = true;
+        testToast();
+        testModal();
+      };
+
+      window.onJsFailed = function() {
+        setStatus('toast', false);
+        setStatus('modal', false);
+      };
+
+      /* ─── Run CSS tests after brief delay ─── */
       setTimeout(function() {
         testButton();
         testBadge();
         testInput();
-        testToast();
-        testModal();
-      }, 200);
+      }, 100);
 
-      // Expose test functions for buttons
+      /* ─── 5 second timeout: if JS still not loaded, fail ─── */
+      setTimeout(function() {
+        if (!jsReady) {
+          setStatus('toast', false);
+          setStatus('modal', false);
+        }
+      }, 5000);
+
+      /* ─── Interactive test buttons ─── */
       window.runToastTest = function() {
-        if (typeof ToastManager === 'undefined') {
+        if (!jsReady || typeof window.ToastManager === 'undefined') {
           setStatus('toast', false);
           return;
         }
-        ToastManager.show({
-          type: 'success',
-          message: 'Toast is working! Loaded from CDN.',
-          duration: 3000
-        });
+        ToastManager.show({ type: 'success', message: 'Toast working! Loaded from CDN.', duration: 3000 });
       };
 
       window.runModalTest = function() {
-        if (typeof ModalManager === 'undefined') {
+        if (!jsReady || typeof window.ModalManager === 'undefined') {
           setStatus('modal', false);
           return;
         }
