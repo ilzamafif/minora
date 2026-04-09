@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minora — Documentation</title>
+  <link rel="stylesheet" href="../dist/minora.css">
+  <style>
+    /* ── Docs App Styles ─────────────────────────────────── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --docs-sidebar-w: 260px;
+      --docs-content-max: 800px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-neutral-800);
+      background: #ffffff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Top Bar ─────────────────────────────────────────── */
+    .docs-topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: var(--border-width) solid var(--color-neutral-100);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-6);
+    }
+
+    .docs-topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      text-decoration: none;
+      color: var(--color-neutral-900);
+    }
+
+    .docs-topbar-brand svg {
+      width: var(--space-5);
+      height: var(--space-5);
+    }
+
+    .docs-topbar-brand span {
+      font-family: var(--font-serif);
+      font-size: var(--text-lg);
+      font-weight: var(--font-bold);
+      letter-spacing: var(--tracking-tight);
+    }
+
+    .docs-topbar-brand span em {
+      font-style: normal;
+      color: var(--color-accent-500);
+    }
+
+    .docs-topbar-version {
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      color: var(--color-neutral-500);
+      background: var(--color-neutral-100);
+      padding: var(--space-0-25) var(--space-1-5);
+      border-radius: var(--radius-pill);
+    }
+
+    .docs-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .docs-topbar-link {
+      font-size: var(--text-sm);
+      color: var(--color-neutral-500);
+      text-decoration: none;
+      font-weight: var(--font-medium);
+      transition: color var(--duration-fast) var(--ease-in-out);
+    }
+
+    .docs-topbar-link:hover { color: var(--color-neutral-800); }
+
+    .docs-menu-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--color-neutral-600);
+      padding: var(--space-1);
+    }
+
+    /* ── Layout ──────────────────────────────────────────── */
+    .docs-layout {
+      display: flex;
+      margin-top: 56px;
+      min-height: calc(100vh - 56px);
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────── */
+    .docs-sidebar {
+      width: var(--docs-sidebar-w);
+      position: fixed;
+      top: 56px;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      border-right: var(--border-width) solid var(--color-neutral-100);
+      padding: var(--space-6) var(--space-4);
+      background: #ffffff;
+      z-index: 100;
+      transition: transform var(--duration-normal) var(--ease-out);
+    }
+
+    .docs-sidebar-section {
+      margin-bottom: var(--space-6);
+    }
+
+    .docs-sidebar-label {
+      font-size: 10px;
+      font-weight: var(--font-semibold);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wider);
+      color: var(--color-neutral-400);
+      padding: 0 var(--space-3);
+      margin-bottom: var(--space-2);
+    }
+
+    .docs-sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2-5);
+      padding: var(--space-1-5) var(--space-3);
+      border-radius: var(--radius-sm);
+      color: var(--color-neutral-600);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      transition: color var(--duration-fast) var(--ease-in-out),
+                  background-color var(--duration-fast) var(--ease-in-out);
+      cursor: pointer;
+    }
+
+    .docs-sidebar-link:hover {
+      color: var(--color-neutral-900);
+      background-color: var(--color-neutral-50);
+    }
+
+    .docs-sidebar-link.active {
+      color: var(--color-accent-600);
+      background-color: var(--color-accent-50);
+    }
+
+    .docs-sidebar-link svg {
+      width: var(--space-4);
+      height: var(--space-4);
+      flex-shrink: 0;
+      color: var(--color-neutral-400);
+    }
+
+    .docs-sidebar-link.active svg {
+      color: var(--color-accent-500);
+    }
+
+    .docs-sidebar-badge {
+      margin-left: auto;
+      font-size: 9px;
+      font-weight: var(--font-semibold);
+      padding: var(--space-0-25) var(--space-1-5);
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+    }
+
+    .docs-sidebar-badge.new {
+      background: var(--color-success-light);
+      color: var(--color-success-dark);
+    }
+
+    .docs-sidebar-badge.updated {
+      background: var(--color-info-light);
+      color: var(--color-info-dark);
+    }
+
+    /* ── Content ─────────────────────────────────────────── */
+    .docs-content {
+      margin-left: var(--docs-sidebar-w);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .docs-content-inner {
+      max-width: var(--docs-content-max);
+      margin: 0 auto;
+      padding: var(--space-10) var(--space-8) var(--space-20);
+    }
+
+    /* ── Page sections ───────────────────────────────────── */
+    .docs-page { display: none; }
+    .docs-page.active { display: block; }
+
+    .docs-h1 {
+      font-family: var(--font-serif);
+      font-size: var(--text-3xl);
+      font-weight: var(--font-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-2);
+      letter-spacing: var(--tracking-tight);
+    }
+
+    .docs-desc {
+      font-size: var(--text-base);
+      color: var(--color-neutral-500);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-8);
+    }
+
+    .docs-h2 {
+      font-family: var(--font-sans);
+      font-size: var(--text-xl);
+      font-weight: var(--font-semibold);
+      color: var(--color-neutral-900);
+      margin-top: var(--space-10);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-2);
+      border-bottom: var(--border-width) solid var(--color-neutral-100);
+    }
+
+    .docs-h3 {
+      font-family: var(--font-sans);
+      font-size: var(--text-base);
+      font-weight: var(--font-semibold);
+      color: var(--color-neutral-800);
+      margin-top: var(--space-6);
+      margin-bottom: var(--space-3);
+    }
+
+    .docs-p {
+      font-size: var(--text-sm);
+      color: var(--color-neutral-600);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-4);
+    }
+
+    /* ── Preview Card ────────────────────────────────────── */
+    .docs-preview {
+      border: var(--border-width) solid var(--color-neutral-200);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-4);
+      overflow: hidden;
+    }
+
+    .docs-preview-canvas {
+      padding: var(--space-8);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      align-items: center;
+      background: #ffffff;
+      min-height: 100px;
+    }
+
+    .docs-preview-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-2) var(--space-4);
+      background: var(--color-neutral-50);
+      border-top: var(--border-width) solid var(--color-neutral-100);
+    }
+
+    .docs-preview-label {
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      color: var(--color-neutral-500);
+    }
+
+    /* ── Code Block ──────────────────────────────────────── */
+    .docs-code-block {
+      position: relative;
+      margin-bottom: var(--space-6);
+    }
+
+    .docs-code-block pre {
+      background: var(--color-neutral-900);
+      color: var(--color-neutral-300);
+      padding: var(--space-4) var(--space-5);
+      border-radius: var(--radius-md);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      line-height: var(--leading-relaxed);
+      overflow-x: auto;
+      white-space: pre;
+      tab-size: 2;
+    }
+
+    .docs-copy-btn {
+      position: absolute;
+      top: var(--space-3);
+      right: var(--space-3);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1-5);
+      padding: var(--space-1) var(--space-2);
+      font-family: var(--font-sans);
+      font-size: var(--text-xs);
+      font-weight: var(--font-medium);
+      color: var(--color-neutral-400);
+      background: rgba(255,255,255,0.08);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: color var(--duration-fast) var(--ease-in-out),
+                  background-color var(--duration-fast) var(--ease-in-out);
+    }
+
+    .docs-copy-btn:hover {
+      color: var(--color-neutral-50);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .docs-copy-btn.copied {
+      color: var(--color-success);
+    }
+
+    .docs-copy-btn svg {
+      width: var(--space-3-5);
+      height: var(--space-3-5);
+    }
+
+    /* ── Syntax Highlighting ─────────────────────────────── */
+    .hl-tag { color: #f472b6; }
+    .hl-attr { color: #93c5fd; }
+    .hl-str { color: #86efac; }
+    .hl-comment { color: #6b7280; font-style: italic; }
+    .hl-class { color: #fbbf24; }
+
+    /* ── Props Table ─────────────────────────────────────── */
+    .docs-props {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: var(--space-6);
+      font-size: var(--text-sm);
+    }
+
+    .docs-props th {
+      text-align: left;
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-xs);
+      font-weight: var(--font-semibold);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      color: var(--color-neutral-500);
+      background: var(--color-neutral-50);
+      border-bottom: var(--border-width) solid var(--color-neutral-200);
+    }
+
+    .docs-props td {
+      padding: var(--space-2-5) var(--space-3);
+      border-bottom: var(--border-width) solid var(--color-neutral-100);
+      vertical-align: top;
+    }
+
+    .docs-props code {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      background: var(--color-neutral-100);
+      padding: var(--space-0-25) var(--space-1-5);
+      border-radius: var(--radius-sm);
+      color: var(--color-accent-700);
+    }
+
+    /* ── Token Grid ──────────────────────────────────────── */
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    .token-swatch {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: var(--border-width) solid var(--color-neutral-200);
+    }
+
+    .token-swatch-color {
+      height: 64px;
+    }
+
+    .token-swatch-label {
+      padding: var(--space-2);
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      color: var(--color-neutral-600);
+      background: #ffffff;
+    }
+
+    .token-swatch-var {
+      padding: 0 var(--space-2) var(--space-2);
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--color-neutral-400);
+      background: #ffffff;
+      word-break: break-all;
+    }
+
+    /* ── Type Badges ─────────────────────────────────────── */
+    .type-string { color: #86efac; }
+    .type-number { color: #fbbf24; }
+    .type-boolean { color: #f472b6; }
+    .type-default { color: #93c5fd; }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .docs-sidebar {
+        transform: translateX(-100%);
+      }
+      .docs-sidebar.open {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.1);
+      }
+      .docs-content {
+        margin-left: 0;
+      }
+      .docs-menu-btn {
+        display: block;
+      }
+      .docs-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        top: 56px;
+        background: rgba(0,0,0,0.3);
+        z-index: 50;
+      }
+      .docs-overlay.visible {
+        display: block;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .docs-content-inner {
+        padding: var(--space-6) var(--space-4) var(--space-16);
+      }
+      .docs-preview-canvas {
+        padding: var(--space-4);
+      }
+      .docs-h1 {
+        font-size: var(--text-2xl);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════
+       TOP BAR
+       ════════════════════════════════════════════════════════ -->
+  <header class="docs-topbar">
+    <a href="#" class="docs-topbar-brand" onclick="navigate('getting-started'); return false;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
+        <line x1="12" y1="22" x2="12" y2="15.5"></line>
+        <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+        <polyline points="2 15.5 12 8.5 22 15.5"></polyline>
+        <line x1="12" y1="2" x2="12" y2="8.5"></line>
+      </svg>
+      <span>minora<em>.</em></span>
+      <span class="docs-topbar-version">v0.1.1</span>
+    </a>
+    <div class="docs-topbar-actions">
+      <a href="https://github.com/ilzamafif/minora" class="docs-topbar-link" target="_blank">GitHub</a>
+      <button class="docs-menu-btn" id="menuToggle" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="docs-overlay" id="docsOverlay"></div>
+
+  <!-- ════════════════════════════════════════════════════════
+       LAYOUT
+       ════════════════════════════════════════════════════════ -->
+  <div class="docs-layout">
+
+    <!-- ── Sidebar ─────────────────────────────────────────── -->
+    <aside class="docs-sidebar" id="docsSidebar">
+      <nav>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Getting Started</div>
+          <a class="docs-sidebar-link active" data-page="getting-started" onclick="navigate('getting-started')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Introduction
+          </a>
+          <a class="docs-sidebar-link" data-page="tokens" onclick="navigate('tokens')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="10.5" r="2.5"></circle><circle cx="8.5" cy="7.5" r="2.5"></circle><circle cx="6.5" cy="12.5" r="2.5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+            Design Tokens
+          </a>
+        </div>
+
+        <div class="docs-sidebar-section">
+          <div class="docs-sidebar-label">Components</div>
+          <a class="docs-sidebar-link" data-page="button" onclick="navigate('button')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="2"></rect><line x1="12" y1="10" x2="12" y2="14"></line></svg>
+            Button
+          </a>
+          <a class="docs-sidebar-link" data-page="badge" onclick="navigate('badge')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path></svg>
+            Badge
+            <span class="docs-sidebar-badge new">New</span>
+          </a>
+          <a class="docs-sidebar-link" data-page="avatar" onclick="navigate('avatar')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Avatar
+          </a>
+          <a class="docs-sidebar-link" data-page="input" onclick="navigate('input')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            Input
+          </a>
+          <a class="docs-sidebar-link" data-page="select" onclick="navigate('select')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            Select
+          </a>
+          <a class="docs-sidebar-link" data-page="checkbox" onclick="navigate('checkbox')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><polyline points="9 14 11 16 15 12"></polyline></svg>
+            Checkbox
+          </a>
+          <a class="docs-sidebar-link" data-page="toggle" onclick="navigate('toggle')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="5" width="22" height="14" rx="7"></rect><circle cx="16" cy="12" r="3"></circle></svg>
+            Toggle
+          </a>
+          <a class="docs-sidebar-link" data-page="modal" onclick="navigate('modal')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="6" y1="8" x2="6" y2="8"></line><line x1="10" y1="8" x2="10" y2="8"></line></svg>
+            Modal
+          </a>
+          <a class="docs-sidebar-link" data-page="toast" onclick="navigate('toast')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path></svg>
+            Toast
+            <span class="docs-sidebar-badge updated">Updated</span>
+          </a>
+          <a class="docs-sidebar-link" data-page="alert" onclick="navigate('alert')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            Alert
+          </a>
+          <a class="docs-sidebar-link" data-page="divider" onclick="navigate('divider')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+            Divider
+          </a>
+          <a class="docs-sidebar-link" data-page="tooltip" onclick="navigate('tooltip')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Tooltip
+          </a>
+        </div>
+
+      </nav>
+    </aside>
+
+    <!-- ── Content ─────────────────────────────────────────── -->
+    <main class="docs-content">
+      <div class="docs-content-inner">
+
+        <!-- ════════════════════════════════════════════════════
+             PAGE: Getting Started
+             ════════════════════════════════════════════════════ -->
+        <div class="docs-page active" id="page-getting-started">
+          <h1 class="docs-h1">Introduction</h1>
+          <p class="docs-desc">Minora is an elegant minimalist UI kit built with vanilla HTML, CSS, and JavaScript. Every component uses CSS custom properties from a single source of truth — change one token, the entire system adapts.</p>
+
+          <h2 class="docs-h2">Installation</h2>
+          <p class="docs-p">Add Minora to your project via CDN. No build step required.</p>
+
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-html"><span class="hl-comment">&lt;!-- CSS: all components --&gt;</span>
+<span class="hl-tag">&lt;link</span> <span class="hl-attr">rel</span>=<span class="hl-str">"stylesheet"</span>
+  <span class="hl-attr">href</span>=<span class="hl-str">"https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.1.1/dist/minora.min.css"</span><span class="hl-tag">&gt;</span>
+
+<span class="hl-comment">&lt;!-- JS: modal, toast, select, tooltip --&gt;</span>
+<span class="hl-tag">&lt;script</span> <span class="hl-attr">src</span>=<span class="hl-str">"https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.1.1/dist/minora.min.js"</span><span class="hl-tag">&gt;&lt;/script&gt;</span></code></pre>
+          </div>
+
+          <h2 class="docs-h2">Quick Start</h2>
+          <p class="docs-p">Use any component by adding the appropriate classes to your HTML.</p>
+
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-primary btn-md">Get Started</button>
+              <span class="badge badge-success badge-md"><span class="badge-dot"></span> Active</span>
+              <div class="switch switch-md">
+                <input type="checkbox" class="switch-native" checked />
+                <span class="switch-track"><span class="switch-thumb"></span></span>
+              </div>
+            </div>
+            <div class="docs-preview-footer">
+              <span class="docs-preview-label">Button + Badge + Toggle</span>
+            </div>
+          </div>
+
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-html"><span class="hl-comment">&lt;!-- Button --&gt;</span>
+<span class="hl-tag">&lt;button</span> <span class="hl-class">class</span>=<span class="hl-str">"btn btn-primary btn-md"</span><span class="hl-tag">&gt;</span>Get Started<span class="hl-tag">&lt;/button&gt;</span>
+
+<span class="hl-comment">&lt;!-- Badge --&gt;</span>
+<span class="hl-tag">&lt;span</span> <span class="hl-class">class</span>=<span class="hl-str">"badge badge-success badge-md"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;span</span> <span class="hl-class">class</span>=<span class="hl-str">"badge-dot"</span><span class="hl-tag">&gt;&lt;/span&gt;</span>
+  Active
+<span class="hl-tag">&lt;/span&gt;</span>
+
+<span class="hl-comment">&lt;!-- Toggle --&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-class">class</span>=<span class="hl-str">"switch switch-md"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span>=<span class="hl-str">"checkbox"</span> <span class="hl-class">class</span>=<span class="hl-str">"switch-native"</span> <span class="hl-attr">checked</span> <span class="hl-tag">/&gt;</span>
+  <span class="hl-tag">&lt;span</span> <span class="hl-class">class</span>=<span class="hl-str">"switch-track"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;span</span> <span class="hl-class">class</span>=<span class="hl-str">"switch-thumb"</span><span class="hl-tag">&gt;&lt;/span&gt;</span>
+  <span class="hl-tag">&lt;/span&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+          </div>
+
+          <h2 class="docs-h2">Folder Structure</h2>
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-text">minora/
+├── dist/
+│   ├── minora.css          ← All components
+│   ├── minora.min.css      ← Minified (22 KB gzipped)
+│   ├── minora.js           ← All JS modules
+│   ├── minora.min.js       ← Minified (9 KB gzipped)
+│   └── tokens.css          ← Design tokens standalone
+├── src/
+│   ├── tokens.css          ← Source of truth
+│   ├── components/         ← 13 CSS files
+│   └── js/                 ← 4 JS modules
+└── docs/                   ← Demo pages</code></pre>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════
+             PAGE: Design Tokens
+             ════════════════════════════════════════════════════ -->
+        <div class="docs-page" id="page-tokens">
+          <h1 class="docs-h1">Design Tokens</h1>
+          <p class="docs-desc">Every color, spacing, and animation value comes from CSS custom properties. Change one token, the entire system adapts.</p>
+
+          <h2 class="docs-h2">Colors — Neutral Scale</h2>
+          <div class="token-grid">
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-50);"></div><div class="token-swatch-label">50</div><div class="token-swatch-var">--color-neutral-50</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-100);"></div><div class="token-swatch-label">100</div><div class="token-swatch-var">--color-neutral-100</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-200);"></div><div class="token-swatch-label">200</div><div class="token-swatch-var">--color-neutral-200</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-300);"></div><div class="token-swatch-label">300</div><div class="token-swatch-var">--color-neutral-300</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-400);"></div><div class="token-swatch-label">400</div><div class="token-swatch-var">--color-neutral-400</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-500);"></div><div class="token-swatch-label">500</div><div class="token-swatch-var">--color-neutral-500</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-600);"></div><div class="token-swatch-label">600</div><div class="token-swatch-var">--color-neutral-600</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-700);"></div><div class="token-swatch-label">700</div><div class="token-swatch-var">--color-neutral-700</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-800);"></div><div class="token-swatch-label">800</div><div class="token-swatch-var">--color-neutral-800</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-neutral-900);"></div><div class="token-swatch-label">900</div><div class="token-swatch-var">--color-neutral-900</div></div>
+          </div>
+
+          <h2 class="docs-h2">Colors — Accent (Warm Gold)</h2>
+          <div class="token-grid">
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-accent-50);"></div><div class="token-swatch-label">50</div><div class="token-swatch-var">--color-accent-50</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-accent-100);"></div><div class="token-swatch-label">100</div><div class="token-swatch-var">--color-accent-100</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-accent-200);"></div><div class="token-swatch-label">200</div><div class="token-swatch-var">--color-accent-200</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-accent-300);"></div><div class="token-swatch-label">300</div><div class="token-swatch-var">--color-accent-300</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-accent-400);"></div><div class="token-swatch-label">400</div><div class="token-swatch-var">--color-accent-400</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-accent-500);"></div><div class="token-swatch-label">500 ★</div><div class="token-swatch-var">--color-accent-500</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-accent-600);"></div><div class="token-swatch-label">600</div><div class="token-swatch-var">--color-accent-600</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-accent-700);"></div><div class="token-swatch-label">700</div><div class="token-swatch-var">--color-accent-700</div></div>
+          </div>
+
+          <h2 class="docs-h2">Colors — Semantic</h2>
+          <div class="token-grid">
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-success);"></div><div class="token-swatch-label">Success</div><div class="token-swatch-var">--color-success</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-warning);"></div><div class="token-swatch-label">Warning</div><div class="token-swatch-var">--color-warning</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-error);"></div><div class="token-swatch-label">Error</div><div class="token-swatch-var">--color-error</div></div>
+            <div class="token-swatch"><div class="token-swatch-color" style="background:var(--color-info);"></div><div class="token-swatch-label">Info</div><div class="token-swatch-var">--color-info</div></div>
+          </div>
+
+          <h2 class="docs-h2">Typography</h2>
+          <div style="margin-bottom:var(--space-6);">
+            <div style="font-family:var(--font-serif);font-size:var(--text-4xl);font-weight:var(--font-bold);color:var(--color-neutral-900);margin-bottom:var(--space-2);">Playfair Display</div>
+            <div style="font-size:var(--text-xs);color:var(--color-neutral-500);font-family:var(--font-mono);margin-bottom:var(--space-4);">--font-serif: 'Playfair Display', serif;</div>
+            <div style="font-family:var(--font-sans);font-size:var(--text-xl);font-weight:var(--font-medium);color:var(--color-neutral-700);margin-bottom:var(--space-2);">Inter — The Body Font</div>
+            <div style="font-size:var(--text-xs);color:var(--color-neutral-500);font-family:var(--font-mono);">--font-sans: 'Inter', system-ui, sans-serif;</div>
+          </div>
+
+          <h2 class="docs-h2">Spacing Scale (4px base)</h2>
+          <div style="display:flex;flex-direction:column;gap:var(--space-2);margin-bottom:var(--space-6);">
+            <div style="display:flex;align-items:center;gap:var(--space-3);">
+              <div style="width:var(--space-1);height:var(--space-1);background:var(--color-accent-500);border-radius:2px;"></div>
+              <code style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-neutral-600);min-width:80px;">--space-1</code>
+              <span style="font-size:var(--text-xs);color:var(--color-neutral-400);">4px</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--space-3);">
+              <div style="width:var(--space-2);height:var(--space-2);background:var(--color-accent-500);border-radius:2px;"></div>
+              <code style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-neutral-600);min-width:80px;">--space-2</code>
+              <span style="font-size:var(--text-xs);color:var(--color-neutral-400);">8px</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--space-3);">
+              <div style="width:var(--space-4);height:var(--space-4);background:var(--color-accent-500);border-radius:2px;"></div>
+              <code style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-neutral-600);min-width:80px;">--space-4</code>
+              <span style="font-size:var(--text-xs);color:var(--color-neutral-400);">16px</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--space-3);">
+              <div style="width:var(--space-6);height:var(--space-6);background:var(--color-accent-500);border-radius:2px;"></div>
+              <code style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-neutral-600);min-width:80px;">--space-6</code>
+              <span style="font-size:var(--text-xs);color:var(--color-neutral-400);">24px</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--space-3);">
+              <div style="width:var(--space-8);height:var(--space-8);background:var(--color-accent-500);border-radius:2px;"></div>
+              <code style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-neutral-600);min-width:80px;">--space-8</code>
+              <span style="font-size:var(--text-xs);color:var(--color-neutral-400);">32px</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--space-3);">
+              <div style="width:var(--space-12);height:var(--space-12);background:var(--color-accent-500);border-radius:2px;"></div>
+              <code style="font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-neutral-600);min-width:80px;">--space-12</code>
+              <span style="font-size:var(--text-xs);color:var(--color-neutral-400);">48px</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════
+             PAGE: Button
+             ════════════════════════════════════════════════════ -->
+        <div class="docs-page" id="page-button">
+          <h1 class="docs-h1">Button</h1>
+          <p class="docs-desc">Interactive element for actions, navigation, and form submission. Available in solid, outline, and ghost variants with three sizes and loading state.</p>
+
+          <h2 class="docs-h2">Variants</h2>
+
+          <!-- Solid -->
+          <h3 class="docs-h3">Solid</h3>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-primary btn-md">Primary</button>
+              <button class="btn btn-secondary btn-md">Secondary</button>
+              <button class="btn btn-neutral btn-md">Neutral</button>
+            </div>
+            <div class="docs-preview-footer">
+              <span class="docs-preview-label">btn btn-primary|secondary|neutral btn-md</span>
+            </div>
+          </div>
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-html"><span class="hl-tag">&lt;button</span> <span class="hl-class">class</span>=<span class="hl-str">"btn btn-primary btn-md"</span><span class="hl-tag">&gt;</span>Primary<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-tag">&lt;button</span> <span class="hl-class">class</span>=<span class="hl-str">"btn btn-secondary btn-md"</span><span class="hl-tag">&gt;</span>Secondary<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-tag">&lt;button</span> <span class="hl-class">class</span>=<span class="hl-str">"btn btn-neutral btn-md"</span><span class="hl-tag">&gt;</span>Neutral<span class="hl-tag">&lt;/button&gt;</span></code></pre>
+          </div>
+
+          <!-- Outline -->
+          <h3 class="docs-h3">Outline</h3>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-outline-primary btn-md">Outline</button>
+              <button class="btn btn-outline-secondary btn-md">Outline</button>
+              <button class="btn btn-outline-neutral btn-md">Outline</button>
+            </div>
+            <div class="docs-preview-footer">
+              <span class="docs-preview-label">btn btn-outline-primary|secondary|neutral btn-md</span>
+            </div>
+          </div>
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-html"><span class="hl-tag">&lt;button</span> <span class="hl-class">class</span>=<span class="hl-str">"btn btn-outline-primary btn-md"</span><span class="hl-tag">&gt;</span>Outline<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-tag">&lt;button</span> <span class="hl-class">class</span>=<span class="hl-str">"btn btn-outline-secondary btn-md"</span><span class="hl-tag">&gt;</span>Outline<span class="hl-tag">&lt;/button&gt;</span>
+<span class="hl-tag">&lt;button</span> <span class="hl-class">class</span>=<span class="hl-str">"btn btn-outline-neutral btn-md"</span><span class="hl-tag">&gt;</span>Outline<span class="hl-tag">&lt;/button&gt;</span></code></pre>
+          </div>
+
+          <!-- Ghost -->
+          <h3 class="docs-h3">Ghost</h3>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-ghost-primary btn-md">Ghost</button>
+              <button class="btn btn-ghost-secondary btn-md">Ghost</button>
+              <button class="btn btn-ghost-neutral btn-md">Ghost</button>
+            </div>
+            <div class="docs-preview-footer">
+              <span class="docs-preview-label">btn btn-ghost-primary|secondary|neutral btn-md</span>
+            </div>
+          </div>
+
+          <!-- Destructive -->
+          <h3 class="docs-h3">Destructive</h3>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-destructive btn-md">Delete</button>
+              <button class="btn btn-destructive-outline btn-md">Delete</button>
+              <button class="btn btn-destructive-ghost btn-md">Delete</button>
+            </div>
+          </div>
+
+          <h2 class="docs-h2">Sizes</h2>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas" style="align-items:flex-end;">
+              <button class="btn btn-primary btn-sm">Small</button>
+              <button class="btn btn-primary btn-md">Medium</button>
+              <button class="btn btn-primary btn-lg">Large</button>
+            </div>
+            <div class="docs-preview-footer">
+              <span class="docs-preview-label">btn-sm (32px) · btn-md (40px) · btn-lg (48px)</span>
+            </div>
+          </div>
+
+          <h2 class="docs-h2">States</h2>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-primary btn-md">Default</button>
+              <button class="btn btn-primary btn-md" disabled>Disabled</button>
+              <button class="btn btn-primary btn-md btn-loading">
+                <svg class="btn-spinner" viewBox="0 0 24 24" fill="none"><circle class="spinner-circle" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/></svg>
+                <span class="btn-label">Loading</span>
+              </button>
+            </div>
+          </div>
+
+          <h2 class="docs-h2">With Icon</h2>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-primary btn-md">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Download
+              </button>
+              <button class="btn btn-outline-primary btn-md">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Watch Demo
+              </button>
+            </div>
+          </div>
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-html"><span class="hl-tag">&lt;button</span> <span class="hl-class">class</span>=<span class="hl-str">"btn btn-primary btn-md"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;svg</span> <span class="hl-attr">width</span>=<span class="hl-str">"16"</span> <span class="hl-attr">height</span>=<span class="hl-str">"16"</span> <span class="hl-attr">viewBox</span>=<span class="hl-str">"0 0 24 24"</span><span class="hl-tag">&gt;</span>...<span class="hl-tag">&lt;/svg&gt;</span>
+  Download
+<span class="hl-tag">&lt;/button&gt;</span></code></pre>
+          </div>
+
+          <h2 class="docs-h2">API</h2>
+          <table class="docs-props">
+            <thead>
+              <tr>
+                <th>Class</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>btn</code></td>
+                <td><span class="type-string">string</span></td>
+                <td><span class="type-default">required</span></td>
+                <td>Base button reset and layout</td>
+              </tr>
+              <tr>
+                <td><code>btn-{variant}</code></td>
+                <td><span class="type-string">string</span></td>
+                <td><span class="type-default">—</span></td>
+                <td>Color scheme: <code>primary</code>, <code>secondary</code>, <code>neutral</code>, <code>outline-*</code>, <code>ghost-*</code>, <code>destructive*</code></td>
+              </tr>
+              <tr>
+                <td><code>btn-{size}</code></td>
+                <td><span class="type-string">string</span></td>
+                <td><span class="type-default">btn-md</span></td>
+                <td>Height: <code>btn-sm</code> (32px), <code>btn-md</code> (40px), <code>btn-lg</code> (48px)</td>
+              </tr>
+              <tr>
+                <td><code>btn-icon</code></td>
+                <td><span class="type-boolean">boolean</span></td>
+                <td><span class="type-default">false</span></td>
+                <td>Make button circular for icon-only use</td>
+              </tr>
+              <tr>
+                <td><code>btn-loading</code></td>
+                <td><span class="type-boolean">boolean</span></td>
+                <td><span class="type-default">false</span></td>
+                <td>Show spinner, disable interactions</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2 class="docs-h2">Usage Example</h2>
+          <p class="docs-p">Buttons in a form context with loading state on submit.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas" style="flex-direction:column;align-items:stretch;">
+              <div class="input-group">
+                <label class="input-label">Email</label>
+                <div class="input-wrapper">
+                  <input class="input input-md" type="email" placeholder="you@example.com" />
+                </div>
+              </div>
+              <div style="display:flex;gap:var(--space-3);">
+                <button class="btn btn-primary btn-md" style="flex:1;">Submit</button>
+                <button class="btn btn-secondary btn-md">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════
+             PAGE: Badge
+             ════════════════════════════════════════════════════ -->
+        <div class="docs-page" id="page-badge">
+          <h1 class="docs-h1">Badge</h1>
+          <p class="docs-desc">Small status indicators and labels. Available in solid, subtle, and outline variants with optional dot indicator.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <span class="badge badge-success badge-md"><span class="badge-dot"></span> Active</span>
+              <span class="badge badge-warning badge-md">Pending</span>
+              <span class="badge badge-error badge-md">Failed</span>
+              <span class="badge badge-subtle-info badge-md">Info</span>
+              <span class="badge badge-outline-neutral badge-md">Tag</span>
+            </div>
+            <div class="docs-preview-footer">
+              <span class="docs-preview-label">All badge variants</span>
+            </div>
+          </div>
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-html"><span class="hl-comment">&lt;!-- Solid with dot indicator --&gt;</span>
+<span class="hl-tag">&lt;span</span> <span class="hl-class">class</span>=<span class="hl-str">"badge badge-success badge-md"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;span</span> <span class="hl-class">class</span>=<span class="hl-str">"badge-dot"</span><span class="hl-tag">&gt;&lt;/span&gt;</span>
+  Active
+<span class="hl-tag">&lt;/span&gt;</span>
+
+<span class="hl-comment">&lt;!-- Subtle --&gt;</span>
+<span class="hl-tag">&lt;span</span> <span class="hl-class">class</span>=<span class="hl-str">"badge badge-subtle-info badge-md"</span><span class="hl-tag">&gt;</span>Info<span class="hl-tag">&lt;/span&gt;</span>
+
+<span class="hl-comment">&lt;!-- Outline --&gt;</span>
+<span class="hl-tag">&lt;span</span> <span class="hl-class">class</span>=<span class="hl-str">"badge badge-outline-neutral badge-md"</span><span class="hl-tag">&gt;</span>Tag<span class="hl-tag">&lt;/span&gt;</span></code></pre>
+          </div>
+          <table class="docs-props">
+            <thead><tr><th>Class</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>badge</code></td><td><span class="type-string">string</span></td><td><span class="type-default">required</span></td><td>Base badge</td></tr>
+              <tr><td><code>badge-{type}</code></td><td><span class="type-string">string</span></td><td><span class="type-default">—</span></td><td>Color: <code>primary</code>, <code>success</code>, <code>warning</code>, <code>error</code>, <code>neutral</code></td></tr>
+              <tr><td><code>badge-subtle-{type}</code></td><td><span class="type-string">string</span></td><td><span class="type-default">—</span></td><td>Light background variant</td></tr>
+              <tr><td><code>badge-outline-{type}</code></td><td><span class="type-string">string</span></td><td><span class="type-default">—</span></td><td>Border only variant</td></tr>
+              <tr><td><code>badge-{size}</code></td><td><span class="type-string">string</span></td><td><span class="type-default">badge-md</span></td><td><code>badge-sm</code> (20px), <code>badge-md</code> (24px)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════
+             PAGE: Avatar
+             ════════════════════════════════════════════════════ -->
+        <div class="docs-page" id="page-avatar">
+          <h1 class="docs-h1">Avatar</h1>
+          <p class="docs-desc">User profile pictures with initials fallback, icon fallback, and status indicators.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas" style="align-items:flex-end;">
+              <div class="avatar avatar-xs" style="background:var(--color-accent-500);color:var(--color-neutral-50);font-family:var(--font-sans);font-size:var(--text-xs);font-weight:var(--font-semibold);">A</div>
+              <div class="avatar avatar-sm" style="background:var(--color-accent-600);color:var(--color-neutral-50);font-family:var(--font-sans);font-size:var(--text-xs);font-weight:var(--font-semibold);">B</div>
+              <div class="avatar avatar-md" style="background:var(--color-accent-700);color:var(--color-neutral-50);font-family:var(--font-sans);font-size:var(--text-sm);font-weight:var(--font-semibold);">CD</div>
+              <div class="avatar avatar-lg">
+                <img src="https://i.pravatar.cc/80?img=11" alt="" style="width:100%;height:100%;object-fit:cover;" />
+                <div class="avatar-status" data-status="online"></div>
+              </div>
+              <div class="avatar avatar-xl">
+                <img src="https://i.pravatar.cc/80?img=32" alt="" style="width:100%;height:100%;object-fit:cover;" />
+                <div class="avatar-status" data-status="away"></div>
+              </div>
+            </div>
+          </div>
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-html"><span class="hl-comment">&lt;!-- Initials --&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-class">class</span>=<span class="hl-str">"avatar avatar-md"</span> <span class="hl-attr">style</span>=<span class="hl-str">"background:var(--color-accent-500);color:var(--color-neutral-50);font-family:var(--font-sans);font-weight:var(--font-semibold);"</span><span class="hl-tag">&gt;</span>
+  AB
+<span class="hl-tag">&lt;/div&gt;</span>
+
+<span class="hl-comment">&lt;!-- Image with status --&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-class">class</span>=<span class="hl-str">"avatar avatar-lg"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;img</span> <span class="hl-attr">src</span>=<span class="hl-str">"photo.jpg"</span> <span class="hl-tag">/&gt;</span>
+  <span class="hl-tag">&lt;div</span> <span class="hl-class">class</span>=<span class="hl-str">"avatar-status"</span> <span class="hl-attr">data-status</span>=<span class="hl-str">"online"</span><span class="hl-tag">&gt;&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════
+             PAGE: Input
+             ════════════════════════════════════════════════════ -->
+        <div class="docs-page" id="page-input">
+          <h1 class="docs-h1">Input</h1>
+          <p class="docs-desc">Text input fields with default, filled, and underline variants. Supports icons, validation states, and clear button.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas" style="flex-direction:column;align-items:stretch;max-width:320px;">
+              <div class="input-group">
+                <label class="input-label">Default</label>
+                <div class="input-wrapper">
+                  <input class="input input-md" type="text" placeholder="Type here…" />
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">With icon</label>
+                <div class="input-wrapper">
+                  <span class="input-icon-leading">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                  </span>
+                  <input class="input input-md" type="text" placeholder="Search…" />
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Filled</label>
+                <div class="input-wrapper input-filled">
+                  <input class="input input-md" type="email" placeholder="you@example.com" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-html"><span class="hl-tag">&lt;div</span> <span class="hl-class">class</span>=<span class="hl-str">"input-group"</span><span class="hl-tag">&gt;</span>
+  <span class="hl-tag">&lt;label</span> <span class="hl-class">class</span>=<span class="hl-str">"input-label"</span> <span class="hl-attr">for</span>=<span class="hl-str">"email"</span><span class="hl-tag">&gt;</span>Email<span class="hl-tag">&lt;/label&gt;</span>
+  <span class="hl-tag">&lt;div</span> <span class="hl-class">class</span>=<span class="hl-str">"input-wrapper"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;input</span> <span class="hl-class">class</span>=<span class="hl-str">"input input-md"</span> <span class="hl-attr">id</span>=<span class="hl-str">"email"</span> <span class="hl-attr">type</span>=<span class="hl-str">"email"</span> <span class="hl-attr">placeholder</span>=<span class="hl-str">"you@example.com"</span> <span class="hl-tag">/&gt;</span>
+  <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></code></pre>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════
+             PLACEHOLDER PAGES for remaining components
+             ════════════════════════════════════════════════════ -->
+        <div class="docs-page" id="page-select">
+          <h1 class="docs-h1">Select</h1>
+          <p class="docs-desc">Custom dropdown with search, keyboard navigation, and grouped options. Documentation coming soon.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <div class="select select-md" data-select>
+                <div class="select-trigger" role="combobox" tabindex="0">
+                  <span class="select-placeholder">Choose an option…</span>
+                  <span class="select-value" hidden></span>
+                  <span class="select-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+                </div>
+                <select hidden><option>Choose an option…</option><option value="a">Option A</option><option value="b">Option B</option></select>
+                <div class="select-dropdown">
+                  <div class="select-search-wrapper"><input class="select-search-input" type="text" placeholder="Search…" autocomplete="off" /></div>
+                  <div class="select-options">
+                    <div class="select-option" data-value="a"><span>Option A</span><svg class="select-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                    <div class="select-option" data-value="b"><span>Option B</span><svg class="select-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="docs-page" id="page-checkbox">
+          <h1 class="docs-h1">Checkbox</h1>
+          <p class="docs-desc">Standard, filled, and card variants with animated checkmark. Documentation coming soon.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <label class="checkbox checkbox-md">
+                <input type="checkbox" class="checkbox-native" checked />
+                <span class="checkbox-box"><svg class="checkbox-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <span class="checkbox-label">Checked</span>
+              </label>
+              <label class="checkbox checkbox-md">
+                <input type="checkbox" class="checkbox-native" />
+                <span class="checkbox-box"><svg class="checkbox-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <span class="checkbox-label">Unchecked</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="docs-page" id="page-toggle">
+          <h1 class="docs-h1">Toggle</h1>
+          <p class="docs-desc">Smooth animated switches with optional icon in thumb. Documentation coming soon.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <div class="switch switch-md">
+                <input type="checkbox" class="switch-native" checked />
+                <span class="switch-track"><span class="switch-thumb"></span></span>
+              </div>
+              <div class="switch switch-md">
+                <input type="checkbox" class="switch-native" />
+                <span class="switch-track"><span class="switch-thumb"></span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="docs-page" id="page-modal">
+          <h1 class="docs-h1">Modal</h1>
+          <p class="docs-desc">Overlay dialogs with focus trap, scroll lock, and nested stacking. Click below to try it.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-primary btn-md" onclick="ModalManager.open('docs-modal')">Open Modal</button>
+            </div>
+          </div>
+          <div class="modal-overlay" id="docs-modal" role="dialog" aria-modal="true" aria-labelledby="docs-modal-title">
+            <div class="modal modal-md">
+              <div class="modal-header">
+                <h2 class="modal-title" id="docs-modal-title">Documentation Modal</h2>
+                <button class="modal-close" aria-label="Close" onclick="ModalManager.close('docs-modal')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p style="font-size:var(--text-sm);color:var(--color-neutral-600);line-height:var(--leading-relaxed);">This modal has focus trap (Tab stays inside), scroll lock (body can't scroll behind), and closes on Escape key or backdrop click.</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary btn-md" onclick="ModalManager.close('docs-modal')">Close</button>
+                <button class="btn btn-primary btn-md" onclick="ModalManager.close('docs-modal');ToastManager.show({type:'success',message:'Confirmed!'})">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="docs-page" id="page-toast">
+          <h1 class="docs-h1">Toast</h1>
+          <p class="docs-desc">Floating notifications with progress bar, stacking, and auto-dismiss.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-primary btn-sm" onclick="ToastManager.show({type:'success',message:'Changes saved successfully!'})">Success</button>
+              <button class="btn btn-outline-primary btn-sm" onclick="ToastManager.show({type:'error',message:'Failed to upload file.'})">Error</button>
+              <button class="btn btn-ghost-primary btn-sm" onclick="ToastManager.show({type:'warning',message:'Storage almost full.',duration:6000})">Warning</button>
+            </div>
+          </div>
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-javascript"><span class="hl-comment">// Simple toast</span>
+<span class="hl-class">ToastManager</span>.show({
+  <span class="hl-attr">type</span>: <span class="hl-str">'success'</span>,
+  <span class="hl-attr">message</span>: <span class="hl-str">'Changes saved!'</span>
+});
+
+<span class="hl-comment">// With action button</span>
+<span class="hl-class">ToastManager</span>.show({
+  <span class="hl-attr">type</span>: <span class="hl-str">'error'</span>,
+  <span class="hl-attr">message</span>: <span class="hl-str">'Upload failed.'</span>,
+  <span class="hl-attr">action</span>: {
+    <span class="hl-attr">label</span>: <span class="hl-str">'Retry'</span>,
+    <span class="hl-attr">onClick</span>: () <span class="hl-tag">=&gt;</span> <span class="hl-comment">/* retry logic */</span>
+  }
+});</code></pre>
+          </div>
+        </div>
+
+        <div class="docs-page" id="page-alert">
+          <h1 class="docs-h1">Alert</h1>
+          <p class="docs-desc">Inline banners with subtle, filled, and outline variants. Documentation coming soon.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas" style="flex-direction:column;align-items:stretch;">
+              <div class="alert alert-subtle alert-success">
+                <svg class="alert-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <div class="alert-body"><strong class="alert-title">Success</strong><p class="alert-desc">Operation completed.</p></div>
+              </div>
+              <div class="alert alert-subtle alert-error">
+                <svg class="alert-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <div class="alert-body"><strong class="alert-title">Error</strong><p class="alert-desc">Something went wrong.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="docs-page" id="page-divider">
+          <h1 class="docs-h1">Divider</h1>
+          <p class="docs-desc">Horizontal rules and vertical separators. Documentation coming soon.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas" style="flex-direction:column;width:100%;">
+              <hr class="divider" />
+              <div class="divider divider-label" style="margin:var(--space-3) 0;"><span>or continue with</span></div>
+              <hr class="divider divider-dashed" />
+            </div>
+          </div>
+        </div>
+
+        <div class="docs-page" id="page-tooltip">
+          <h1 class="docs-h1">Tooltip</h1>
+          <p class="docs-desc">Hover, focus, or click triggered tooltips with 9 positions and auto-flip.</p>
+          <div class="docs-preview">
+            <div class="docs-preview-canvas">
+              <button class="btn btn-outline-primary btn-sm" data-tooltip="Hello from tooltip!" data-tooltip-position="top">Hover me</button>
+              <button class="btn btn-outline-neutral btn-sm" data-tooltip="Rich content" data-tooltip-title="Tooltip Title" data-tooltip-body="This is a rich tooltip with title and body text." data-tooltip-variant="light">Rich tooltip</button>
+            </div>
+          </div>
+          <div class="docs-code-block">
+            <button class="docs-copy-btn" onclick="copyCode(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+            <pre><code class="language-html"><span class="hl-comment">&lt;!-- Simple --&gt;</span>
+<span class="hl-tag">&lt;button</span> <span class="hl-attr">data-tooltip</span>=<span class="hl-str">"Tooltip text"</span> <span class="hl-attr">data-tooltip-position</span>=<span class="hl-str">"top"</span><span class="hl-tag">&gt;</span>Hover<span class="hl-tag">&lt;/button&gt;</span>
+
+<span class="hl-comment">&lt;!-- Rich --&gt;</span>
+<span class="hl-tag">&lt;button</span> <span class="hl-attr">data-tooltip</span>=<span class="hl-str">"Text"</span> <span class="hl-attr">data-tooltip-title</span>=<span class="hl-str">"Title"</span>
+  <span class="hl-attr">data-tooltip-body</span>=<span class="hl-str">"Body text"</span> <span class="hl-attr">data-tooltip-variant</span>=<span class="hl-str">"light"</span><span class="hl-tag">&gt;</span>Rich<span class="hl-tag">&lt;/button&gt;</span></code></pre>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       JS
+       ════════════════════════════════════════════════════════ -->
+  <script src="../dist/minora.min.js"></script>
+  <script>
+    (function() {
+      'use strict';
+
+      /* ── Navigation ── */
+      window.navigate = function(page) {
+        // Hide all pages
+        document.querySelectorAll('.docs-page').forEach(function(p) { p.classList.remove('active'); });
+        // Show target page
+        var target = document.getElementById('page-' + page);
+        if (target) target.classList.add('active');
+        // Update sidebar
+        document.querySelectorAll('.docs-sidebar-link').forEach(function(link) {
+          link.classList.toggle('active', link.getAttribute('data-page') === page);
+        });
+        // Close mobile sidebar
+        document.getElementById('docsSidebar').classList.remove('open');
+        document.getElementById('docsOverlay').classList.remove('visible');
+        // Scroll to top
+        window.scrollTo(0, 0);
+      };
+
+      /* ── Mobile sidebar toggle ── */
+      var menuBtn = document.getElementById('menuToggle');
+      var sidebar = document.getElementById('docsSidebar');
+      var overlay = document.getElementById('docsOverlay');
+      if (menuBtn) {
+        menuBtn.addEventListener('click', function() {
+          sidebar.classList.toggle('open');
+          overlay.classList.toggle('visible');
+        });
+      }
+      if (overlay) {
+        overlay.addEventListener('click', function() {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('visible');
+        });
+      }
+
+      /* ── Copy to clipboard ── */
+      window.copyCode = function(btn) {
+        var pre = btn.parentElement.querySelector('pre');
+        var text = pre.textContent || pre.innerText;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(function() {
+            btn.classList.add('copied');
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Copied!';
+            setTimeout(function() {
+              btn.classList.remove('copied');
+              btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+            }, 2000);
+          });
+        }
+      };
+
+      /* ── Init select components in docs ── */
+      document.querySelectorAll('[data-select]').forEach(function(el) {
+        var trigger = el.querySelector('.select-trigger');
+        var dropdown = el.querySelector('.select-dropdown');
+        var native = el.querySelector('select');
+        var options = el.querySelectorAll('.select-option');
+        if (trigger && dropdown && native) {
+          trigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelectorAll('.select-open').forEach(function(s) { s.classList.remove('select-open'); });
+            el.classList.toggle('select-open');
+          });
+          options.forEach(function(opt) {
+            opt.addEventListener('click', function(e) {
+              e.stopPropagation();
+              native.value = opt.getAttribute('data-value');
+              var ph = el.querySelector('.select-placeholder');
+              var val = el.querySelector('.select-value');
+              if (ph) { ph.textContent = opt.querySelector('span').textContent; ph.hidden = false; }
+              if (val) { val.textContent = opt.querySelector('span').textContent; val.hidden = true; }
+              options.forEach(function(o) { o.classList.remove('is-selected'); });
+              opt.classList.add('is-selected');
+              el.classList.remove('select-open');
+            });
+          });
+          document.addEventListener('click', function(e) { if (!el.contains(e.target)) el.classList.remove('select-open'); });
+        }
+      });
+
+    })();
+  </script>
+
+</body>
+</html>
