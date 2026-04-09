@@ -76,7 +76,7 @@ async function buildCSS(silent) {
   const summary = [];
 
   // 1. Build full CSS (tokens first, then components in alphabetical order)
-  let fullCSS = `/*! Minora UI Kit v0.1.0 — https://github.com/username/minora */\n\n`;
+  let fullCSS = `/*! Minora UI Kit v0.1.0 — https://github.com/ilzamafif/minora */\n\n`;
 
   // Tokens always first
   if (existsSync(tokensPath)) {
@@ -143,7 +143,7 @@ async function buildJS(silent) {
   }
 
   // 1. Concat all JS with file headers
-  let fullJS = `/*! Minora UI Kit v0.1.0 — https://github.com/username/minora */\n\n`;
+  let fullJS = `/*! Minora UI Kit v0.1.0 — https://github.com/ilzamafif/minora */\n\n`;
   fullJS += `'use strict';\n\n`;
   jsFiles.forEach(file => {
     const relative = join('src', 'js', file.split('/').pop());

@@ -37,37 +37,33 @@ Minora is a handcrafted UI kit built with **vanilla HTML, CSS, and JavaScript**.
 ### CSS Only
 
 ```html
-<link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ilzamafif/minora@latest/dist/minora.min.css">
 ```
 
 ### JS Only (modals, toasts, selects, tooltips)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ilzamafif/minora@latest/dist/minora.min.js"></script>
 ```
 
 ### CSS + JS (complete)
 
 ```html
-<link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.css">
-<script src="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ilzamafif/minora@latest/dist/minora.min.css">
+<script src="https://cdn.jsdelivr.net/gh/ilzamafif/minora@latest/dist/minora.min.js"></script>
 ```
 
 ### Specific Version (recommended for production)
 
 ```html
-<link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/username/minora@v0.1.0/dist/minora.min.css">
-<script src="https://cdn.jsdelivr.net/gh/username/minora@v0.1.0/dist/minora.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.1.0/dist/minora.min.css">
+<script src="https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.1.0/dist/minora.min.js"></script>
 ```
 
 ### Design Tokens Only
 
 ```html
-<link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ilzamafif/minora@latest/dist/tokens.css">
 ```
 
 ---
@@ -84,7 +80,7 @@ Copy-paste this into an `.html` file and open in your browser:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minora Quick Start</title>
   <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.css">
+    href="https://cdn.jsdelivr.net/gh/ilzamafif/minora@latest/dist/minora.min.css">
 </head>
 <body style="max-width:480px; margin:4rem auto; padding:0 1rem;">
 
@@ -104,7 +100,7 @@ Copy-paste this into an `.html` file and open in your browser:
   </div>
 
   <!-- Toast (needs JS) -->
-  <script src="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/ilzamafif/minora@latest/dist/minora.min.js"></script>
   <script>
     function demo() {
       ToastManager.show({
@@ -124,24 +120,24 @@ Copy-paste this into an `.html` file and open in your browser:
 
 | Component | Description | Status |
 |---|---|---|
-| **[Button](https://github.com/username/minora#button)** | Solid, outline, ghost, destructive — 3 sizes, icon-only, loading spinner | ✅ Stable |
-| **[Badge](https://github.com/username/minora#badge)** | Solid/subtle/outline — with dot indicator, notification overlay | ✅ Stable |
-| **[Tag](https://github.com/username/minora#tag)** | Dismissible tags with fade animation, clickable, icon support | ✅ Stable |
-| **[Avatar](https://github.com/username/minora#avatar)** | Image/initials/icon fallback, status dots, overlapping groups | ✅ Stable |
-| **[Divider](https://github.com/username/minora#divider)** | Horizontal rules, text/icon separators, vertical separators | ✅ Stable |
-| **[Input](https://github.com/username/minora#input)** | Default/filled/underline variants, icon addons, clear button | ✅ Stable |
-| **[Textarea](https://github.com/username/minora#textarea)** | Auto-resize, character counter, validation states | ✅ Stable |
-| **[Select](https://github.com/username/minora#select)** | Custom dropdown with search, grouped options, keyboard nav | ✅ Stable |
-| **[Multiselect](https://github.com/username/minora#multiselect)** | Tag-based selection, select all/clear, counter badge | ✅ Stable |
-| **[Checkbox](https://github.com/username/minora#checkbox)** | Standard/filled/card, radio buttons, segmented controls | ✅ Stable |
-| **[Toggle](https://github.com/username/minora#toggle)** | Smooth animated switches with icon support | ✅ Stable |
-| **[Form Validation](https://github.com/username/minora#form-validation)** | Inline errors, password strength, form-level alerts | ✅ Stable |
-| **[Toast](https://github.com/username/minora#toast)** | 6 positions, progress bar, stacking, auto-dismiss, actions | ✅ Stable |
-| **[Modal](https://github.com/username/minora#modal)** | Focus trap, scroll lock, nested stacking, multi-step | ✅ Stable |
-| **[Dialog](https://github.com/username/minora#dialog)** | Confirm, destructive, info, input-based confirmation | ✅ Stable |
-| **[Tooltip](https://github.com/username/minora#tooltip)** | 9 positions, auto-flip, rich content, interactive | ✅ Stable |
-| **[Popover](https://github.com/username/minora#popover)** | Click-triggered panels with header/body/footer | ✅ Stable |
-| **[Alert](https://github.com/username/minora#alert)** | Subtle/filled/outline, inline messages, page banners | ✅ Stable |
+| **[Button](https://github.com/ilzamafif/minora#button)** | Solid, outline, ghost, destructive — 3 sizes, icon-only, loading spinner | ✅ Stable |
+| **[Badge](https://github.com/ilzamafif/minora#badge)** | Solid/subtle/outline — with dot indicator, notification overlay | ✅ Stable |
+| **[Tag](https://github.com/ilzamafif/minora#tag)** | Dismissible tags with fade animation, clickable, icon support | ✅ Stable |
+| **[Avatar](https://github.com/ilzamafif/minora#avatar)** | Image/initials/icon fallback, status dots, overlapping groups | ✅ Stable |
+| **[Divider](https://github.com/ilzamafif/minora#divider)** | Horizontal rules, text/icon separators, vertical separators | ✅ Stable |
+| **[Input](https://github.com/ilzamafif/minora#input)** | Default/filled/underline variants, icon addons, clear button | ✅ Stable |
+| **[Textarea](https://github.com/ilzamafif/minora#textarea)** | Auto-resize, character counter, validation states | ✅ Stable |
+| **[Select](https://github.com/ilzamafif/minora#select)** | Custom dropdown with search, grouped options, keyboard nav | ✅ Stable |
+| **[Multiselect](https://github.com/ilzamafif/minora#multiselect)** | Tag-based selection, select all/clear, counter badge | ✅ Stable |
+| **[Checkbox](https://github.com/ilzamafif/minora#checkbox)** | Standard/filled/card, radio buttons, segmented controls | ✅ Stable |
+| **[Toggle](https://github.com/ilzamafif/minora#toggle)** | Smooth animated switches with icon support | ✅ Stable |
+| **[Form Validation](https://github.com/ilzamafif/minora#form-validation)** | Inline errors, password strength, form-level alerts | ✅ Stable |
+| **[Toast](https://github.com/ilzamafif/minora#toast)** | 6 positions, progress bar, stacking, auto-dismiss, actions | ✅ Stable |
+| **[Modal](https://github.com/ilzamafif/minora#modal)** | Focus trap, scroll lock, nested stacking, multi-step | ✅ Stable |
+| **[Dialog](https://github.com/ilzamafif/minora#dialog)** | Confirm, destructive, info, input-based confirmation | ✅ Stable |
+| **[Tooltip](https://github.com/ilzamafif/minora#tooltip)** | 9 positions, auto-flip, rich content, interactive | ✅ Stable |
+| **[Popover](https://github.com/ilzamafif/minora#popover)** | Click-triggered panels with header/body/footer | ✅ Stable |
+| **[Alert](https://github.com/ilzamafif/minora#alert)** | Subtle/filled/outline, inline messages, page banners | ✅ Stable |
 
 ---
 
@@ -227,7 +223,7 @@ See [tokens.css](src/tokens.css) for all available custom properties:
 ## Build from Source
 
 ```bash
-git clone https://github.com/username/minora.git
+git clone https://github.com/ilzamafif/minora.git
 cd minora
 npm install
 npm run build:all    # CSS + JS concat + minify

@@ -7,10 +7,10 @@
 
   <!-- ═══════════════════════════════════════════════════════
        Minora loaded ONLY from jsDelivr CDN — no local files
-       Replace "username" with your actual GitHub username
+       Replace "ilzamafif" with your actual GitHub ilzamafif
        ═══════════════════════════════════════════════════════ -->
   <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.css">
+    href="https://cdn.jsdelivr.net/gh/ilzamafif/minora@main/dist/minora.min.css">
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -276,8 +276,14 @@
     </div>
   </div>
 
-  <!-- JS from CDN — uses onload/onerror for reliable detection -->
-  <script src="https://cdn.jsdelivr.net/gh/username/minora@latest/dist/minora.min.js"
+  <!-- Global JS load/error detectors — must be on window BEFORE the CDN script tag -->
+  <script>
+    window._jsLoaded = false;
+    window._jsFailed = false;
+    window.onJsLoaded = function() { window._jsLoaded = true; };
+    window.onJsFailed = function() { window._jsFailed = true; };
+  </script>
+  <script src="https://cdn.jsdelivr.net/gh/ilzamafif/minora@main/dist/minora.min.js"
           onload="onJsLoaded()"
           onerror="onJsFailed()"></script>
 
@@ -288,10 +294,9 @@
       var results = { button: false, badge: false, input: false, toast: false, modal: false };
       var total = 5;
       var passed = 0;
-      var jsReady = false;
 
       document.getElementById('cdn-info').textContent =
-        'Source: cdn.jsdelivr.net/gh/username/minora@latest/dist/';
+        'Source: cdn.jsdelivr.net/gh/ilzamafif/minora@main/dist/';
 
       /* ─── CSS Tests (run immediately) ─── */
       function testButton() {
@@ -311,7 +316,7 @@
         setStatus('input', input && style.border && style.border !== 'none');
       }
 
-      /* ─── JS Tests (run only after CDN JS confirms loaded) ─── */
+      /* ─── JS Tests ─── */
       function testToast() {
         setStatus('toast',
           typeof window.ToastManager !== 'undefined' &&
@@ -352,21 +357,9 @@
         } else {
           el.className = 'verify-result fail';
           el.innerHTML = '<h2>✗ ' + (total - passed) + ' Failed</h2><p>' +
-            passed + '/' + total + ' loaded. Replace "username" in CDN URLs with your GitHub username.</p>';
+            passed + '/' + total + ' loaded. Replace "ilzamafif" in CDN URLs with your GitHub ilzamafif.</p>';
         }
       }
-
-      /* ─── Called by script tag onload ─── */
-      window.onJsLoaded = function() {
-        jsReady = true;
-        testToast();
-        testModal();
-      };
-
-      window.onJsFailed = function() {
-        setStatus('toast', false);
-        setStatus('modal', false);
-      };
 
       /* ─── Run CSS tests after brief delay ─── */
       setTimeout(function() {
@@ -375,26 +368,38 @@
         testInput();
       }, 100);
 
-      /* ─── 5 second timeout: if JS still not loaded, fail ─── */
-      setTimeout(function() {
-        if (!jsReady) {
+      /* ─── Poll for JS load status ─── */
+      var pollInterval = setInterval(function() {
+        if (window._jsFailed) {
+          clearInterval(pollInterval);
           setStatus('toast', false);
           setStatus('modal', false);
+        } else if (window._jsLoaded) {
+          clearInterval(pollInterval);
+          testToast();
+          testModal();
         }
-      }, 5000);
+      }, 100);
+
+      /* ─── 8 second timeout: if JS still not loaded, fail ─── */
+      setTimeout(function() {
+        clearInterval(pollInterval);
+        if (results.toast === undefined) setStatus('toast', false);
+        if (results.modal === undefined) setStatus('modal', false);
+      }, 8000);
 
       /* ─── Interactive test buttons ─── */
       window.runToastTest = function() {
-        if (!jsReady || typeof window.ToastManager === 'undefined') {
-          setStatus('toast', false);
+        if (typeof window.ToastManager === 'undefined') {
+          alert('ToastManager not loaded. CDN JS file failed to load.');
           return;
         }
         ToastManager.show({ type: 'success', message: 'Toast working! Loaded from CDN.', duration: 3000 });
       };
 
       window.runModalTest = function() {
-        if (!jsReady || typeof window.ModalManager === 'undefined') {
-          setStatus('modal', false);
+        if (typeof window.ModalManager === 'undefined') {
+          alert('ModalManager not loaded. CDN JS file failed to load.');
           return;
         }
         ModalManager.open('cdn-modal-test');

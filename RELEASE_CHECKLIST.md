@@ -101,9 +101,9 @@ Follow these steps every time you release a new version of Minora.
 
 - [ ] **Test each CDN URL manually:**
   ```
-  https://cdn.jsdelivr.net/gh/username/minora@v0.2.0/dist/minora.min.css
-  https://cdn.jsdelivr.net/gh/username/minora@v0.2.0/dist/minora.min.js
-  https://cdn.jsdelivr.net/gh/username/minora@v0.2.0/dist/tokens.css
+  https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.2.0/dist/minora.min.css
+  https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.2.0/dist/minora.min.js
+  https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.2.0/dist/tokens.css
   https://cdn.jsdelivr.net/npm/minora@0.2.0/dist/minora.min.css
   https://cdn.jsdelivr.net/npm/minora@0.2.0/dist/minora.min.js
   ```
