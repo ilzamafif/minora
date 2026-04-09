@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/badge/version-0.1.0-bb6b21)]()
 [![license](https://img.shields.io/badge/license-MIT-78716c)](LICENSE)
 [![size](https://img.shields.io/badge/gzip-44KB-d4872e)](dist/minora.min.css)
-[![cdn](https://img.shields.io/badge/cdn-jsDelivr-57534e)](https://www.jsdelivr.com/package/gh/username/minora)
+[![cdn](https://img.shields.io/badge/cdn-jsDelivr-57534e)](https://www.jsdelivr.com/package/gh/ilzamafif/minora)
 
 Minora is a handcrafted UI kit built with **vanilla HTML, CSS, and JavaScript**. Every component uses CSS custom properties from a single source of truth — change one token, the entire system adapts. No frameworks. No dependencies. Just clean, elegant components.
 
