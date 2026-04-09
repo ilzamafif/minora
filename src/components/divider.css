@@ -1,0 +1,295 @@
+/* ============================================================
+   ELEGANT MINIMALIST UI KIT — Divider & Separator Components
+   divider.css
+
+   ANATOMY — HORIZONTAL DIVIDER
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <!-- Simple line -->
+     <hr class="divider" />
+
+     <!-- With centered text -->
+     <div class="divider divider-label">
+       <span>atau</span>
+     </div>
+
+     <!-- With centered icon -->
+     <div class="divider divider-icon">
+       <svg class="divider-icon-svg">...</svg>
+     </div>
+
+     <!-- With left/right label -->
+     <div class="divider divider-label divider-label-left">
+       <span>Section</span>
+     </div>
+
+   Class layers:
+     1. .divider               → Base: full-width horizontal rule
+     2. .divider-{weight}      → Thickness (thin/thick)
+     3. .divider-{style}       → Line style (solid/dashed)
+     4. .divider-{color}       → Color (subtle/muted/accent)
+     5. .divider-label         → Wrapper for text/icon variant
+     6. .divider-label-left    → Modifier: label aligned left
+     7. .divider-label-right   → Modifier: label aligned right
+     8. .divider-{spacing}     → Margin utility (sm/md/lg)
+   ─────────────────────────────────────────────────────────────
+
+   ANATOMY — VERTICAL SEPARATOR
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="flex-row">
+       <span>Home</span>
+       <span class="separator"></span>
+       <span>Components</span>
+       <span class="separator separator-dashed"></span>
+       <span>Divider</span>
+     </div>
+
+   Class layers:
+     1. .separator             → Base: vertical line, stretches in flex
+     2. .separator-{weight}    → Thickness (thin/thick)
+     3. .separator-{style}     → Line style (solid/dashed)
+     4. .separator-{color}     → Color (subtle/muted/accent)
+   ─────────────────────────────────────────────────────────────
+   ============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   DIVIDER — Base (Horizontal)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Simple <hr> divider */
+.divider {
+  display: block;
+  width: 100%;
+  border: none;
+  border-top: var(--border-width) solid var(--color-neutral-200);
+  margin: 0;
+}
+
+/* Divider wrapper — for text/icon variants */
+.divider-label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: var(--space-4);
+}
+
+/* The line — left side */
+.divider-label::before {
+  content: '';
+  flex: 1;
+  border-top: var(--border-width) solid var(--color-neutral-200);
+}
+
+/* The line — right side */
+.divider-label::after {
+  content: '';
+  flex: 1;
+  border-top: var(--border-width) solid var(--color-neutral-200);
+}
+
+/* Centered label */
+.divider-label > span,
+.divider-label > svg {
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-neutral-400);
+  line-height: var(--leading-none);
+  text-transform: lowercase;
+}
+
+/* Icon inside divider */
+.divider-icon-svg {
+  flex-shrink: 0;
+  color: var(--color-neutral-400);
+}
+
+/* ── Label alignment modifiers ──────────────────────────── */
+
+/* Label aligned left — only right line visible */
+.divider-label-left::before {
+  display: none;
+}
+
+/* Label aligned right — only left line visible */
+.divider-label-right::after {
+  display: none;
+}
+
+/* Override text-transform for left/right labels */
+.divider-label-left > span,
+.divider-label-right > span {
+  text-transform: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIVIDER — Weight (Thickness)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Thin (1px — default) */
+.divider-thin {
+  border-top-width: var(--border-width);
+}
+
+.divider-thin.divider-label::before,
+.divider-thin.divider-label::after {
+  border-top-width: var(--border-width);
+}
+
+/* Thick (2px) */
+.divider-thick {
+  border-top-width: var(--border-width-2);
+}
+
+.divider-thick.divider-label::before,
+.divider-thick.divider-label::after {
+  border-top-width: var(--border-width-2);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIVIDER — Style
+   ═══════════════════════════════════════════════════════════ */
+
+/* Dashed */
+.divider-dashed {
+  border-top-style: dashed;
+}
+
+.divider-dashed.divider-label::before,
+.divider-dashed.divider-label::after {
+  border-top-style: dashed;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIVIDER — Color
+   ═══════════════════════════════════════════════════════════ */
+
+/* Subtle (default — neutral-200) */
+.divider-subtle {
+  border-top-color: var(--color-neutral-200);
+}
+
+.divider-subtle.divider-label::before,
+.divider-subtle.divider-label::after {
+  border-top-color: var(--color-neutral-200);
+}
+
+.divider-subtle.divider-label > span,
+.divider-subtle.divider-label > svg {
+  color: var(--color-neutral-400);
+}
+
+/* Muted — more visible (neutral-300) */
+.divider-muted {
+  border-top-color: var(--color-neutral-300);
+}
+
+.divider-muted.divider-label::before,
+.divider-muted.divider-label::after {
+  border-top-color: var(--color-neutral-300);
+}
+
+.divider-muted.divider-label > span,
+.divider-muted.divider-label > svg {
+  color: var(--color-neutral-500);
+}
+
+/* Accent — warm gold */
+.divider-accent {
+  border-top-color: var(--color-accent-300);
+}
+
+.divider-accent.divider-label::before,
+.divider-accent.divider-label::after {
+  border-top-color: var(--color-accent-300);
+}
+
+.divider-accent.divider-label > span,
+.divider-accent.divider-label > svg {
+  color: var(--color-accent-500);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIVIDER — Spacing Utility
+   Margin top and bottom for consistent spacing
+   ═══════════════════════════════════════════════════════════ */
+
+.divider-sm {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.divider-md {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.divider-lg {
+  margin-top: var(--space-10);
+  margin-bottom: var(--space-10);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIVIDER — On dark background
+   ═══════════════════════════════════════════════════════════ */
+
+.divider-dark {
+  border-top-color: var(--color-neutral-700);
+}
+
+.divider-dark.divider-label::before,
+.divider-dark.divider-label::after {
+  border-top-color: var(--color-neutral-700);
+}
+
+.divider-dark.divider-label > span,
+.divider-dark.divider-label > svg {
+  color: var(--color-neutral-500);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SEPARATOR — Vertical
+   ═══════════════════════════════════════════════════════════ */
+
+.separator {
+  display: inline-block;
+  align-self: stretch;
+  width: 0;
+  border-right: var(--border-width) solid var(--color-neutral-200);
+  margin: 0 var(--space-4);
+  flex-shrink: 0;
+}
+
+/* ── Weight ─────────────────────────────────────────────── */
+.separator-thin {
+  border-right-width: var(--border-width);
+}
+
+.separator-thick {
+  border-right-width: var(--border-width-2);
+}
+
+/* ── Style ──────────────────────────────────────────────── */
+.separator-dashed {
+  border-right-style: dashed;
+}
+
+/* ── Color ──────────────────────────────────────────────── */
+.separator-subtle {
+  border-right-color: var(--color-neutral-200);
+}
+
+.separator-muted {
+  border-right-color: var(--color-neutral-300);
+}
+
+.separator-accent {
+  border-right-color: var(--color-accent-300);
+}
+
+.separator-dark {
+  border-right-color: var(--color-neutral-700);
+}

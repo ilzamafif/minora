@@ -1,0 +1,577 @@
+/* ============================================================
+   ELEGANT MINIMALIST UI KIT — Badge & Tag Components
+   badge.css
+
+   ANATOMY — BADGE
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <span class="badge badge-success badge-md">
+       <span class="badge-dot"></span>    <!-- optional -->
+       Active
+     </span>
+
+   Class layers:
+     1. .badge                → Base reset, layout, typography
+     2. .badge-{variant}      → Color scheme (solid/subtle/outline)
+     3. .badge-{size}         → Padding, font-size, height
+     4. .badge-dot            → Dot indicator modifier
+     5. .badge-notification   → Position modifier (for avatar/button overlay)
+
+   Usage contexts:
+     - Standalone: just <span class="badge ...">
+     - On avatar:  <span class="badge badge-notification"> (absolute positioned)
+     - On button:  inside button element, inline
+   ─────────────────────────────────────────────────────────────
+
+   ANATOMY — TAG
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <span class="tag tag-dismissible tag-md" role="group">
+       <svg class="tag-icon">...</svg>       <!-- optional -->
+       <span class="tag-label">Design</span>
+       <button class="tag-dismiss" aria-label="Remove">
+         <svg>...</svg>
+       </button>
+     </span>
+
+   Class layers:
+     1. .tag                  → Base layout, typography, border
+     2. .tag-{variant}        → Color scheme (default/clickable/outline)
+     3. .tag-{size}           → Padding, font-size, height
+     4. .tag-dismissible      → Modifier: includes dismiss button
+     5. .tag-clickable        → Modifier: hover state like ghost button
+     6. .tag-dismissing       → Animation state (fade + scale-down)
+
+   Content model:
+     .tag
+     ├── .tag-icon            → Optional leading icon (SVG)
+     ├── .tag-label           → Text content
+     └── .tag-dismiss         → Optional close button (only with .tag-dismissible)
+   ─────────────────────────────────────────────────────────────
+   ============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   BADGE — Base
+   ═══════════════════════════════════════════════════════════ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-wide);
+  line-height: var(--leading-none);
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid transparent;
+  text-decoration: none;
+
+  /* Transisi */
+  transition: color var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out),
+              border-color var(--duration-fast) var(--ease-in-out);
+}
+
+/* ── Dot indicator ──────────────────────────────────────── */
+.badge-dot {
+  display: inline-block;
+  width: var(--space-1-5);
+  height: var(--space-1-5);
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+  /* Warna ikut parent — di-override per variant */
+}
+
+/* ── Sizes ──────────────────────────────────────────────── */
+.badge-sm {
+  min-height: var(--badge-sm-height);
+  padding: var(--space-0-5) var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.badge-sm .badge-dot {
+  width: var(--space-1);
+  height: var(--space-1);
+}
+
+.badge-md {
+  min-height: var(--badge-md-height);
+  padding: var(--space-1) var(--space-2-5);
+  font-size: var(--text-xs);
+}
+
+.badge-md .badge-dot {
+  width: var(--space-1-5);
+  height: var(--space-1-5);
+}
+
+/* ── Notification badge (positioned overlay) ────────────── */
+.badge-notification {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  z-index: var(--z-raised);
+  min-width: var(--space-4);
+  min-height: var(--space-4);
+  padding: var(--space-0-5) var(--space-1);
+  font-size: var(--text-xs);
+  border-radius: var(--radius-pill);
+  border: var(--border-width-2) solid var(--color-neutral-50);
+  line-height: var(--leading-none);
+}
+
+.badge-notification .badge-dot {
+  display: none;
+}
+
+/* ============================================================
+   BADGE — Variant: SOLID
+   Background penuh, teks kontras.
+   ============================================================ */
+
+/* Solid — Primary (Accent Gold) */
+.badge-primary {
+  color: var(--color-neutral-50);
+  background-color: var(--color-accent-500);
+  border-color: var(--color-accent-500);
+}
+
+.badge-primary .badge-dot {
+  background-color: var(--color-neutral-50);
+}
+
+/* Solid — Success */
+.badge-success {
+  color: var(--color-neutral-50);
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.badge-success .badge-dot {
+  background-color: var(--color-neutral-50);
+}
+
+/* Solid — Warning */
+.badge-warning {
+  color: var(--color-neutral-50);
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.badge-warning .badge-dot {
+  background-color: var(--color-neutral-50);
+}
+
+/* Solid — Error */
+.badge-error {
+  color: var(--color-neutral-50);
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.badge-error .badge-dot {
+  background-color: var(--color-neutral-50);
+}
+
+/* Solid — Neutral */
+.badge-neutral {
+  color: var(--color-neutral-50);
+  background-color: var(--color-neutral-700);
+  border-color: var(--color-neutral-700);
+}
+
+.badge-neutral .badge-dot {
+  background-color: var(--color-neutral-50);
+}
+
+/* ============================================================
+   BADGE — Variant: SUBTLE
+   Background sangat light, teks berwarna gelap.
+   ============================================================ */
+
+/* Subtle — Primary */
+.badge-subtle-primary {
+  color: var(--color-accent-700);
+  background-color: var(--color-accent-50);
+  border-color: var(--color-accent-200);
+}
+
+.badge-subtle-primary .badge-dot {
+  background-color: var(--color-accent-500);
+}
+
+/* Subtle — Success */
+.badge-subtle-success {
+  color: var(--color-success-dark);
+  background-color: var(--color-success-light);
+  border-color: var(--color-success-border);
+}
+
+.badge-subtle-success .badge-dot {
+  background-color: var(--color-success);
+}
+
+/* Subtle — Warning */
+.badge-subtle-warning {
+  color: var(--color-warning-dark);
+  background-color: var(--color-warning-light);
+  border-color: var(--color-warning-border);
+}
+
+.badge-subtle-warning .badge-dot {
+  background-color: var(--color-warning);
+}
+
+/* Subtle — Error */
+.badge-subtle-error {
+  color: var(--color-error-dark);
+  background-color: var(--color-error-light);
+  border-color: var(--color-error-border);
+}
+
+.badge-subtle-error .badge-dot {
+  background-color: var(--color-error);
+}
+
+/* Subtle — Neutral */
+.badge-subtle-neutral {
+  color: var(--color-neutral-700);
+  background-color: var(--color-neutral-100);
+  border-color: var(--color-neutral-200);
+}
+
+.badge-subtle-neutral .badge-dot {
+  background-color: var(--color-neutral-500);
+}
+
+/* ============================================================
+   BADGE — Variant: OUTLINE
+   Border solid, background transparan.
+   ============================================================ */
+
+/* Outline — Primary */
+.badge-outline-primary {
+  color: var(--color-accent-600);
+  background-color: transparent;
+  border-color: var(--color-accent-400);
+}
+
+.badge-outline-primary .badge-dot {
+  background-color: var(--color-accent-500);
+}
+
+/* Outline — Success */
+.badge-outline-success {
+  color: var(--color-success);
+  background-color: transparent;
+  border-color: var(--color-success-border);
+}
+
+.badge-outline-success .badge-dot {
+  background-color: var(--color-success);
+}
+
+/* Outline — Warning */
+.badge-outline-warning {
+  color: var(--color-warning);
+  background-color: transparent;
+  border-color: var(--color-warning-border);
+}
+
+.badge-outline-warning .badge-dot {
+  background-color: var(--color-warning);
+}
+
+/* Outline — Error */
+.badge-outline-error {
+  color: var(--color-error);
+  background-color: transparent;
+  border-color: var(--color-error-border);
+}
+
+.badge-outline-error .badge-dot {
+  background-color: var(--color-error);
+}
+
+/* Outline — Neutral */
+.badge-outline-neutral {
+  color: var(--color-neutral-700);
+  background-color: transparent;
+  border-color: var(--color-neutral-300);
+}
+
+.badge-outline-neutral .badge-dot {
+  background-color: var(--color-neutral-500);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TAG — Base
+   ═══════════════════════════════════════════════════════════ */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-wide);
+  line-height: var(--leading-none);
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--color-neutral-200);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+
+  /* Transisi */
+  transition: color var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out),
+              border-color var(--duration-fast) var(--ease-in-out),
+              opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+
+/* ── Tag icon (leading) ─────────────────────────────────── */
+.tag-icon {
+  width: var(--space-3);
+  height: var(--space-3);
+  flex-shrink: 0;
+  color: var(--color-neutral-500);
+}
+
+/* ── Tag label ──────────────────────────────────────────── */
+.tag-label {
+  display: inline;
+}
+
+/* ── Tag dismiss button ─────────────────────────────────── */
+.tag-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-3-5);
+  height: var(--space-3-5);
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-neutral-400);
+  cursor: pointer;
+  padding: var(--space-0);
+  line-height: var(--leading-none);
+
+  /* Transisi */
+  transition: color var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out);
+}
+
+.tag-dismiss:hover {
+  color: var(--color-neutral-700);
+  background-color: var(--color-neutral-200);
+}
+
+.tag-dismiss:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.tag-dismiss svg {
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+/* ── Dismiss animation (fade + scale-down) ──────────────── */
+.tag-dismissing {
+  opacity: 0;
+  transform: scale(0.85);
+  pointer-events: none;
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+
+/* ── Sizes ──────────────────────────────────────────────── */
+.tag-sm {
+  min-height: var(--tag-sm-height);
+  padding: var(--space-0-5) var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.tag-sm .tag-icon {
+  width: var(--space-2-5);
+  height: var(--space-2-5);
+}
+
+.tag-sm .tag-dismiss {
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+.tag-sm .tag-dismiss svg {
+  width: var(--space-2-5);
+  height: var(--space-2-5);
+}
+
+.tag-md {
+  min-height: var(--tag-md-height);
+  padding: var(--space-1) var(--space-2-5);
+  font-size: var(--text-xs);
+}
+
+.tag-md .tag-icon {
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+.tag-md .tag-dismiss {
+  width: var(--space-3-5);
+  height: var(--space-3-5);
+}
+
+.tag-md .tag-dismiss svg {
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+/* ── Variant: Clickable tag (ghost-like hover) ──────────── */
+.tag-clickable {
+  cursor: pointer;
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--color-neutral-600);
+}
+
+.tag-clickable:hover {
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-100);
+}
+
+.tag-clickable:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.tag-clickable:active {
+  background-color: var(--color-neutral-200);
+}
+
+/* ── Variant: Outline tag ───────────────────────────────── */
+.tag-outline {
+  background-color: transparent;
+  border-color: var(--color-neutral-300);
+  color: var(--color-neutral-700);
+}
+
+.tag-outline:hover {
+  background-color: var(--color-neutral-50);
+  border-color: var(--color-neutral-400);
+}
+
+/* ── Variant: Accent tag (primary color) ────────────────── */
+.tag-accent {
+  background-color: var(--color-accent-50);
+  border-color: var(--color-accent-200);
+  color: var(--color-accent-700);
+}
+
+.tag-accent .tag-icon {
+  color: var(--color-accent-500);
+}
+
+.tag-accent .tag-dismiss {
+  color: var(--color-accent-400);
+}
+
+.tag-accent .tag-dismiss:hover {
+  color: var(--color-accent-700);
+  background-color: var(--color-accent-100);
+}
+
+.tag-accent.tag-clickable {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-accent-600);
+}
+
+.tag-accent.tag-clickable:hover {
+  background-color: var(--color-accent-50);
+  color: var(--color-accent-700);
+}
+
+.tag-accent.tag-clickable:active {
+  background-color: var(--color-accent-100);
+}
+
+.tag-accent.tag-outline {
+  background-color: transparent;
+  border-color: var(--color-accent-300);
+  color: var(--color-accent-700);
+}
+
+.tag-accent.tag-outline:hover {
+  background-color: var(--color-accent-50);
+  border-color: var(--color-accent-400);
+}
+
+/* ── Variant: Semantic color tags ───────────────────────── */
+
+/* Success tag */
+.tag-success {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success-border);
+  color: var(--color-success-dark);
+}
+
+.tag-success .tag-icon {
+  color: var(--color-success);
+}
+
+.tag-success .tag-dismiss {
+  color: var(--color-success);
+}
+
+.tag-success .tag-dismiss:hover {
+  color: var(--color-success-dark);
+  background-color: var(--color-success-border);
+}
+
+/* Warning tag */
+.tag-warning {
+  background-color: var(--color-warning-light);
+  border-color: var(--color-warning-border);
+  color: var(--color-warning-dark);
+}
+
+.tag-warning .tag-icon {
+  color: var(--color-warning);
+}
+
+.tag-warning .tag-dismiss {
+  color: var(--color-warning);
+}
+
+.tag-warning .tag-dismiss:hover {
+  color: var(--color-warning-dark);
+  background-color: var(--color-warning-border);
+}
+
+/* Error tag */
+.tag-error {
+  background-color: var(--color-error-light);
+  border-color: var(--color-error-border);
+  color: var(--color-error-dark);
+}
+
+.tag-error .tag-icon {
+  color: var(--color-error);
+}
+
+.tag-error .tag-dismiss {
+  color: var(--color-error);
+}
+
+.tag-error .tag-dismiss:hover {
+  color: var(--color-error-dark);
+  background-color: var(--color-error-border);
+}

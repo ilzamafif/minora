@@ -1,0 +1,437 @@
+/* ============================================================
+   ELEGANT MINIMALIST UI KIT — Modal & Dialog Components
+   modal.css
+
+   ANATOMY — MODAL
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="modal-overlay" id="modal-id" role="dialog" aria-modal="true">
+       <div class="modal modal-md">
+         <div class="modal-header">
+           <h2 class="modal-title">Title</h2>
+           <button class="modal-close" aria-label="Close">
+             <svg>×</svg>
+           </button>
+         </div>
+         <div class="modal-body">
+           Content here…
+         </div>
+         <div class="modal-footer">
+           <button class="btn btn-secondary">Cancel</button>
+           <button class="btn btn-primary">Confirm</button>
+         </div>
+       </div>
+     </div>
+
+   Class layers:
+     1. .modal-overlay        → Backdrop, fixed, blur, z-index
+     2. .modal                → Container, shadow, animation
+     3. .modal-{size}         → Width (sm/md/lg/xl/fullscreen)
+     4. .modal-header          → Title + close button
+     5. .modal-body            → Scrollable content area
+     6. .modal-footer          → Action buttons
+     7. .modal-{variant}       → No-header, scrollable, multi-step
+   ─────────────────────────────────────────────────────────────
+
+   ANATOMY — DIALOG
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="modal-overlay" role="alertdialog" aria-modal="true">
+       <div class="dialog dialog-md">
+         <div class="dialog-icon">
+           <svg>…</svg>
+         </div>
+         <h2 class="dialog-title">Are you sure?</h2>
+         <p class="dialog-desc">This action cannot be undone.</p>
+         <!-- optional: input field -->
+         <div class="dialog-actions">
+           <button class="btn btn-secondary">Cancel</button>
+           <button class="btn btn-destructive">Delete</button>
+         </div>
+       </div>
+     </div>
+   ─────────────────────────────────────────────────────────────
+   ============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL OVERLAY — Backdrop
+   ═══════════════════════════════════════════════════════════ */
+
+.modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background-color: var(--modal-overlay-bg);
+  backdrop-filter: blur(var(--modal-overlay-blur));
+  -webkit-backdrop-filter: blur(var(--modal-overlay-blur));
+  padding: var(--space-6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--modal-open-duration) var(--ease-in-out),
+              visibility var(--modal-open-duration) var(--ease-in-out);
+}
+
+.modal-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Nested modal stacking */
+.modal-overlay + .modal-overlay {
+  z-index: calc(var(--z-modal) + 10);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — Container
+   ═══════════════════════════════════════════════════════════ */
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: var(--modal-max-w);
+  max-height: var(--modal-max-h);
+  background-color: var(--modal-bg);
+  border-radius: var(--modal-radius);
+  box-shadow: var(--modal-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.95) translateY(8px);
+  opacity: 0;
+  transition: transform var(--modal-open-duration) var(--modal-open-ease),
+              opacity var(--modal-open-duration) var(--ease-in-out);
+}
+
+.modal-overlay.is-open .modal {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — Sizes
+   ═══════════════════════════════════════════════════════════ */
+
+.modal-sm {
+  max-width: min(var(--modal-sm), var(--modal-max-w));
+}
+
+.modal-md {
+  max-width: min(var(--modal-md), var(--modal-max-w));
+}
+
+.modal-lg {
+  max-width: min(var(--modal-lg), var(--modal-max-w));
+}
+
+.modal-xl {
+  max-width: min(var(--modal-xl), var(--modal-max-w));
+}
+
+.modal-fullscreen {
+  max-width: calc(100vw - var(--space-4));
+  max-height: calc(100vh - var(--space-4));
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — Header
+   ═══════════════════════════════════════════════════════════ */
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--modal-header-padding);
+  border-bottom: var(--border-width) solid var(--color-neutral-100);
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-neutral-900);
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — Close button
+   ═══════════════════════════════════════════════════════════ */
+
+.modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-7);
+  height: var(--space-7);
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-neutral-400);
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out);
+}
+
+.modal-close:hover {
+  color: var(--color-neutral-700);
+  background-color: var(--color-neutral-100);
+}
+
+.modal-close:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.modal-close svg {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — Body
+   ═══════════════════════════════════════════════════════════ */
+
+.modal-body {
+  padding: var(--modal-body-padding);
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — Footer
+   ═══════════════════════════════════════════════════════════ */
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--modal-footer-padding);
+  border-top: var(--border-width) solid var(--color-neutral-100);
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — Variant: No header
+   ═══════════════════════════════════════════════════════════ */
+
+.modal-no-header .modal-header {
+  display: none;
+}
+
+.modal-no-header .modal-body {
+  padding-top: var(--modal-body-padding);
+}
+
+.modal-no-header .modal-close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-raised);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — Variant: Scrollable
+   Header and footer fixed, body scrolls.
+   ═══════════════════════════════════════════════════════════ */
+
+.modal-scrollable .modal-body {
+  overflow-y: auto;
+  max-height: var(--modal-max-h);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL — Variant: Multi-step
+   ═══════════════════════════════════════════════════════════ */
+
+.modal-steps {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1-5) 0;
+}
+
+.modal-step-indicator {
+  flex: 1;
+  height: var(--space-1);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-neutral-200);
+  transition: background-color var(--duration-normal) var(--ease-in-out);
+}
+
+.modal-step-indicator.is-active {
+  background-color: var(--color-accent-500);
+}
+
+.modal-step-indicator.is-complete {
+  background-color: var(--color-accent-300);
+}
+
+.modal-step-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  margin-bottom: var(--space-2);
+}
+
+.modal-step-label strong {
+  color: var(--color-neutral-700);
+  font-weight: var(--font-medium);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIALOG — Container
+   ═══════════════════════════════════════════════════════════ */
+
+.dialog {
+  position: relative;
+  width: 100%;
+  max-width: min(var(--modal-sm), var(--modal-max-w));
+  background-color: var(--modal-bg);
+  border-radius: var(--modal-radius);
+  box-shadow: var(--modal-shadow);
+  padding: var(--space-6);
+  text-align: center;
+  transform: scale(0.95) translateY(8px);
+  opacity: 0;
+  transition: transform var(--modal-open-duration) var(--modal-open-ease),
+              opacity var(--modal-open-duration) var(--ease-in-out);
+}
+
+.modal-overlay.is-open .dialog {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* Dialog sizes */
+.dialog-sm {
+  max-width: min(320px, var(--modal-max-w));
+}
+
+.dialog-md {
+  max-width: min(var(--modal-sm), var(--modal-max-w));
+}
+
+.dialog-lg {
+  max-width: min(var(--modal-md), var(--modal-max-w));
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIALOG — Icon
+   ═══════════════════════════════════════════════════════════ */
+
+.dialog-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-neutral-100);
+}
+
+.dialog-icon svg {
+  width: var(--space-6);
+  height: var(--space-6);
+}
+
+/* Confirm icon — accent gold */
+.dialog-confirm .dialog-icon {
+  background-color: var(--color-accent-50);
+  color: var(--color-accent-500);
+}
+
+/* Destructive icon — error red */
+.dialog-destructive .dialog-icon {
+  background-color: var(--color-error-light);
+  color: var(--color-error);
+}
+
+/* Info icon — info blue */
+.dialog-info .dialog-icon {
+  background-color: var(--color-info-light);
+  color: var(--color-info);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIALOG — Title & Description
+   ═══════════════════════════════════════════════════════════ */
+
+.dialog-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-neutral-900);
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-2);
+}
+
+.dialog-desc {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-600);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 var(--space-6);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIALOG — Input field
+   ═══════════════════════════════════════════════════════════ */
+
+.dialog-input {
+  width: 100%;
+  margin-bottom: var(--space-5);
+  text-align: left;
+}
+
+.dialog-input .input-wrapper {
+  width: 100%;
+}
+
+.dialog-input .input {
+  width: 100%;
+}
+
+.dialog-hint {
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  margin-top: var(--space-1-5);
+  text-align: left;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DIALOG — Actions
+   ═══════════════════════════════════════════════════════════ */
+
+.dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.dialog-actions-full {
+  justify-content: stretch;
+}
+
+.dialog-actions-full .btn {
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BODY SCROLL LOCK
+   ═══════════════════════════════════════════════════════════ */
+
+body.is-modal-open {
+  overflow: hidden;
+}

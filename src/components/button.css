@@ -1,0 +1,493 @@
+/* ============================================================
+   ELEGANT MINIMALIST UI KIT — Button Component
+   button.css
+
+   ANATOMY OF A BUTTON
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <button class="btn btn-primary btn-md">
+       <!-- optional: <svg class="btn-spinner" ...> -->
+       <span class="btn-label">Label</span>
+     </button>
+
+   Class layers:
+     1. .btn               → Base reset, layout, typography, interaction
+     2. .btn-{variant}     → Color scheme (solid/outline/ghost/destructive)
+     3. .btn-{size}        → Padding, font-size, min-height
+     4. .btn-icon          → Icon-only modifier (circular)
+     5. .btn-loading       → Loading state (disables label, shows spinner)
+     6. :disabled          → Disabled visual state
+     7. :focus-visible     → Focus ring (accessible, not default outline)
+     8. :active            → Pressed state
+
+   Content model:
+     .btn
+     ├── .btn-spinner      → SVG spinner (hidden by default)
+     └── .btn-label        → Text or icon content
+   ─────────────────────────────────────────────────────────────
+   ============================================================ */
+
+/* ──────────────────────────────────────────────────────────
+   1. BASE BUTTON RESET & LAYOUT
+   ────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  position: relative;
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-normal);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  white-space: nowrap;
+  line-height: var(--leading-none);
+  text-decoration: none;
+
+  /* Transisi */
+  transition: color var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out),
+              border-color var(--duration-fast) var(--ease-in-out),
+              box-shadow var(--duration-fast) var(--ease-out),
+              opacity var(--duration-fast) var(--ease-in-out),
+              transform var(--duration-fast) var(--ease-out);
+
+  /* Default: tidak ada outline/box-shadow */
+  outline: none;
+  box-shadow: none;
+
+  /* Prevent double-tap zoom di mobile */
+  touch-action: manipulation;
+
+  /* Reset default button styles */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Focus ring — visible, elegant, bukan default browser */
+.btn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Active / pressed state */
+.btn:active:not(:disabled):not(.btn-loading) {
+  transform: scale(var(--scale-active));
+}
+
+/* Disabled state */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ──────────────────────────────────────────────────────────
+   2. SPINNER (Loading state)
+   ────────────────────────────────────────────────────────── */
+.btn-spinner {
+  display: none;
+  width: var(--space-4);
+  height: var(--space-4);
+  flex-shrink: 0;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+.btn-loading .btn-spinner {
+  display: block;
+}
+
+.btn-loading .btn-label {
+  opacity: 0.7;
+}
+
+@keyframes btn-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ──────────────────────────────────────────────────────────
+   3. SIZE VARIANTS
+   ────────────────────────────────────────────────────────── */
+
+/* Small */
+.btn-sm {
+  min-height: var(--btn-sm-height);
+  padding: var(--space-1-5) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.btn-sm.btn-icon {
+  width: var(--btn-sm-height);
+  height: var(--btn-sm-height);
+  padding: var(--space-0);
+}
+
+.btn-sm .btn-spinner {
+  width: var(--space-3-5);
+  height: var(--space-3-5);
+}
+
+/* Medium (default) */
+.btn-md {
+  min-height: var(--btn-md-height);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.btn-md.btn-icon {
+  width: var(--btn-md-height);
+  height: var(--btn-md-height);
+  padding: var(--space-0);
+}
+
+.btn-md .btn-spinner {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+/* Large */
+.btn-lg {
+  min-height: var(--btn-lg-height);
+  padding: var(--space-2-5) var(--space-6);
+  font-size: var(--text-base);
+}
+
+.btn-lg.btn-icon {
+  width: var(--btn-lg-height);
+  height: var(--btn-lg-height);
+  padding: var(--space-0);
+}
+
+.btn-lg .btn-spinner {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+/* ──────────────────────────────────────────────────────────
+   4. VARIANT: SOLID
+   Background penuh, text kontras.
+   ────────────────────────────────────────────────────────── */
+
+/* Solid — Primary (Accent Gold) */
+.btn-primary {
+  color: var(--color-neutral-50);
+  background-color: var(--color-accent-500);
+  border-color: var(--color-accent-500);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-accent-600);
+  border-color: var(--color-accent-600);
+}
+
+.btn-primary:focus-visible {
+  outline-color: var(--color-accent-500);
+}
+
+.btn-primary:active:not(:disabled) {
+  background-color: var(--color-accent-700);
+  border-color: var(--color-accent-700);
+}
+
+/* Solid — Secondary (Neutral) */
+.btn-secondary {
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-200);
+  border-color: var(--color-neutral-200);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-neutral-300);
+  border-color: var(--color-neutral-300);
+}
+
+.btn-secondary:focus-visible {
+  outline-color: var(--color-neutral-500);
+}
+
+.btn-secondary:active:not(:disabled) {
+  background-color: var(--color-neutral-400);
+  border-color: var(--color-neutral-400);
+}
+
+/* Solid — Neutral Dark (untuk emphasis lebih tinggi) */
+.btn-neutral {
+  color: var(--color-neutral-50);
+  background-color: var(--color-neutral-800);
+  border-color: var(--color-neutral-800);
+}
+
+.btn-neutral:hover:not(:disabled) {
+  background-color: var(--color-neutral-700);
+  border-color: var(--color-neutral-700);
+}
+
+.btn-neutral:focus-visible {
+  outline-color: var(--color-neutral-600);
+}
+
+.btn-neutral:active:not(:disabled) {
+  background-color: var(--color-neutral-600);
+  border-color: var(--color-neutral-600);
+}
+
+/* ──────────────────────────────────────────────────────────
+   5. VARIANT: OUTLINE
+   Border solid, background transparan.
+   ────────────────────────────────────────────────────────── */
+
+/* Outline — Primary */
+.btn-outline-primary {
+  color: var(--color-accent-600);
+  background-color: transparent;
+  border-color: var(--color-accent-400);
+}
+
+.btn-outline-primary:hover:not(:disabled) {
+  color: var(--color-neutral-50);
+  background-color: var(--color-accent-500);
+  border-color: var(--color-accent-500);
+}
+
+.btn-outline-primary:focus-visible {
+  outline-color: var(--color-accent-500);
+}
+
+.btn-outline-primary:active:not(:disabled) {
+  color: var(--color-neutral-50);
+  background-color: var(--color-accent-600);
+  border-color: var(--color-accent-600);
+}
+
+/* Outline — Secondary */
+.btn-outline-secondary {
+  color: var(--color-neutral-700);
+  background-color: transparent;
+  border-color: var(--color-neutral-300);
+}
+
+.btn-outline-secondary:hover:not(:disabled) {
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-100);
+  border-color: var(--color-neutral-400);
+}
+
+.btn-outline-secondary:focus-visible {
+  outline-color: var(--color-neutral-500);
+}
+
+.btn-outline-secondary:active:not(:disabled) {
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-200);
+  border-color: var(--color-neutral-500);
+}
+
+/* Outline — Neutral */
+.btn-outline-neutral {
+  color: var(--color-neutral-800);
+  background-color: transparent;
+  border-color: var(--color-neutral-400);
+}
+
+.btn-outline-neutral:hover:not(:disabled) {
+  color: var(--color-neutral-50);
+  background-color: var(--color-neutral-800);
+  border-color: var(--color-neutral-800);
+}
+
+.btn-outline-neutral:focus-visible {
+  outline-color: var(--color-neutral-600);
+}
+
+.btn-outline-neutral:active:not(:disabled) {
+  color: var(--color-neutral-50);
+  background-color: var(--color-neutral-700);
+  border-color: var(--color-neutral-700);
+}
+
+/* ──────────────────────────────────────────────────────────
+   6. VARIANT: GHOST
+   Tidak ada border, hanya hover state.
+   ────────────────────────────────────────────────────────── */
+
+/* Ghost — Primary */
+.btn-ghost-primary {
+  color: var(--color-accent-600);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-ghost-primary:hover:not(:disabled) {
+  color: var(--color-accent-700);
+  background-color: var(--color-accent-50);
+}
+
+.btn-ghost-primary:focus-visible {
+  outline-color: var(--color-accent-500);
+}
+
+.btn-ghost-primary:active:not(:disabled) {
+  color: var(--color-accent-800);
+  background-color: var(--color-accent-100);
+}
+
+/* Ghost — Secondary */
+.btn-ghost-secondary {
+  color: var(--color-neutral-700);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-ghost-secondary:hover:not(:disabled) {
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-100);
+}
+
+.btn-ghost-secondary:focus-visible {
+  outline-color: var(--color-neutral-500);
+}
+
+.btn-ghost-secondary:active:not(:disabled) {
+  color: var(--color-neutral-900);
+  background-color: var(--color-neutral-200);
+}
+
+/* Ghost — Neutral */
+.btn-ghost-neutral {
+  color: var(--color-neutral-600);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-ghost-neutral:hover:not(:disabled) {
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-100);
+}
+
+.btn-ghost-neutral:focus-visible {
+  outline-color: var(--color-neutral-500);
+}
+
+.btn-ghost-neutral:active:not(:disabled) {
+  color: var(--color-neutral-900);
+  background-color: var(--color-neutral-200);
+}
+
+/* ──────────────────────────────────────────────────────────
+   7. VARIANT: DESTRUCTIVE
+   Untuk aksi berbahaya (delete, remove, dst).
+   ────────────────────────────────────────────────────────── */
+
+/* Destructive — Solid */
+.btn-destructive {
+  color: var(--color-neutral-50);
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.btn-destructive:hover:not(:disabled) {
+  background-color: var(--color-error-dark);
+  border-color: var(--color-error-dark);
+}
+
+.btn-destructive:focus-visible {
+  outline-color: var(--color-error);
+}
+
+.btn-destructive:active:not(:disabled) {
+  background-color: var(--color-error-dark);
+  border-color: var(--color-error-dark);
+}
+
+/* Destructive — Outline */
+.btn-destructive-outline {
+  color: var(--color-error);
+  background-color: transparent;
+  border-color: var(--color-error-border);
+}
+
+.btn-destructive-outline:hover:not(:disabled) {
+  color: var(--color-neutral-50);
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.btn-destructive-outline:focus-visible {
+  outline-color: var(--color-error);
+}
+
+.btn-destructive-outline:active:not(:disabled) {
+  color: var(--color-neutral-50);
+  background-color: var(--color-error-dark);
+  border-color: var(--color-error-dark);
+}
+
+/* Destructive — Ghost */
+.btn-destructive-ghost {
+  color: var(--color-error);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-destructive-ghost:hover:not(:disabled) {
+  color: var(--color-error-dark);
+  background-color: var(--color-error-light);
+}
+
+.btn-destructive-ghost:focus-visible {
+  outline-color: var(--color-error);
+}
+
+.btn-destructive-ghost:active:not(:disabled) {
+  color: var(--color-error-dark);
+  background-color: var(--color-error-border);
+}
+
+/* ──────────────────────────────────────────────────────────
+   8. ICON-ONLY BUTTON MODIFIER
+   Membuat button bulat (radius-md) untuk icon saja.
+   ────────────────────────────────────────────────────────── */
+.btn-icon {
+  border-radius: var(--radius-md);
+  padding: var(--space-0);
+}
+
+/* ──────────────────────────────────────────────────────────
+   9. LOADING STATE OVERRIDE
+   Saat loading, cursor tetap not-allowed.
+   ────────────────────────────────────────────────────────── */
+.btn.btn-loading {
+  cursor: wait;
+  pointer-events: auto; /* tetap bisa di-render, tapi tidak trigger aksi */
+}
+
+.btn.btn-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-raised);
+  cursor: wait;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONTEXTUAL: Button with embedded badge (for badge.html showcase)
+   ═══════════════════════════════════════════════════════════ */
+
+.btn-with-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  position: relative;
+}
+
+.btn-with-badge .badge {
+  position: static;
+  transform: none;
+  border: none;
+}

@@ -1,0 +1,586 @@
+/* ============================================================
+   ELEGANT MINIMALIST UI KIT — Toast & Notification Components
+   toast.css
+
+   ANATOMY — TOAST
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="toast toast-success" role="alert" aria-live="assertive">
+       <svg class="toast-icon">...</svg>
+       <div class="toast-body">
+         <span class="toast-message">Changes saved successfully.</span>
+         <button class="toast-action">Undo</button>
+       </div>
+       <button class="toast-close" aria-label="Close">
+         <svg>×</svg>
+       </button>
+       <div class="toast-progress" style="--progress:1"></div>
+     </div>
+
+   Class layers:
+     1. .toast               → Base card, shadow, layout
+     2. .toast-{type}        → Color scheme (success/error/warning/info/loading/neutral)
+     3. .toast-icon           → Icon on left (type-appropriate)
+     4. .toast-body           → Message + optional action
+     5. .toast-action         → Optional action button (e.g., "Undo")
+     6. .toast-close          → Dismiss button
+     7. .toast-progress       → Auto-dismiss progress bar
+   ─────────────────────────────────────────────────────────────
+
+   ANATOMY — NOTIFICATION PANEL
+   ─────────────────────────────────────────────────────────────
+     <div class="notification-panel">
+       <div class="notification-panel-header">
+         <h3>Notifications</h3>
+         <button class="notification-mark-all">Mark all as read</button>
+       </div>
+       <div class="notification-group-label">Today</div>
+       <div class="notification-item notification-unread">
+         <span class="notification-unread-dot"></span>
+         <div class="notification-avatar">...</div>
+         <div class="notification-content">
+           <p class="notification-text">...</p>
+           <span class="notification-time">...</span>
+         </div>
+       </div>
+       <!-- more items -->
+       <div class="notification-empty">
+         <svg>...</svg>
+         <p>No notifications yet</p>
+       </div>
+     </div>
+   ─────────────────────────────────────────────────────────────
+   ============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST STACK — Container
+   ═══════════════════════════════════════════════════════════ */
+
+.toast-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--toast-stack-gap);
+  position: fixed;
+  z-index: var(--z-toast);
+  pointer-events: none;
+}
+
+.toast-stack-bottom-right {
+  bottom: var(--space-6);
+  right: var(--space-6);
+}
+
+.toast-stack-bottom-left {
+  bottom: var(--space-6);
+  left: var(--space-6);
+}
+
+.toast-stack-bottom-center {
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toast-stack-top-right {
+  top: var(--space-6);
+  right: var(--space-6);
+}
+
+.toast-stack-top-left {
+  top: var(--space-6);
+  left: var(--space-6);
+}
+
+.toast-stack-top-center {
+  top: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST — Base
+   ═══════════════════════════════════════════════════════════ */
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  max-width: var(--toast-max-width);
+  min-width: var(--toast-min-width);
+  background-color: var(--toast-bg);
+  border-radius: var(--toast-border-radius);
+  box-shadow: var(--toast-shadow);
+  border: var(--border-width) solid var(--color-neutral-200);
+  font-size: var(--toast-font-size);
+  color: var(--color-neutral-800);
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity var(--toast-slide-duration) var(--ease-out),
+              transform var(--toast-slide-duration) var(--ease-out),
+              max-height var(--toast-slide-duration) var(--ease-out),
+              margin-bottom var(--toast-slide-duration) var(--ease-out),
+              padding-top var(--toast-slide-duration) var(--ease-out),
+              padding-bottom var(--toast-slide-duration) var(--ease-out);
+}
+
+/* Entrance animation */
+.toast.toast-enter {
+  animation: toast-slide-in var(--toast-slide-duration) var(--ease-out) forwards;
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Exit animation */
+.toast.toast-exit {
+  animation: toast-slide-out var(--toast-slide-duration) var(--ease-in-out) forwards;
+}
+
+@keyframes toast-slide-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+/* ── Icon ─────────────────────────────────────────────────── */
+.toast-icon {
+  flex-shrink: 0;
+  width: var(--toast-icon-size);
+  height: var(--toast-icon-size);
+  margin-top: var(--toast-icon-margin);
+}
+
+/* ── Body ─────────────────────────────────────────────────── */
+.toast-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.toast-message {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--color-neutral-800);
+}
+
+.toast-action {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--color-accent-600);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-0-5) 0;
+  margin-top: var(--space-0-5);
+  text-decoration: underline;
+  text-underline-offset: var(--toast-action-underline-offset);
+  transition: color var(--duration-fast) var(--ease-in-out);
+  align-self: flex-start;
+}
+
+.toast-action:hover {
+  color: var(--color-accent-700);
+}
+
+/* ── Close button ─────────────────────────────────────────── */
+.toast-close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-5);
+  height: var(--space-5);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-neutral-400);
+  cursor: pointer;
+  padding: 0;
+  margin-top: -2px;
+  margin-right: -2px;
+  transition: color var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out);
+}
+
+.toast-close:hover {
+  color: var(--color-neutral-700);
+  background-color: var(--color-neutral-100);
+}
+
+.toast-close svg {
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+/* ── Progress bar ─────────────────────────────────────────── */
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--toast-progress-height);
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.toast-progress::after {
+  content: '';
+  display: block;
+  height: 100%;
+  background-color: var(--color-neutral-300);
+  transform-origin: left;
+  transform: scaleX(var(--progress, 1));
+  transition: transform linear;
+}
+
+.toast-progress.running::after {
+  animation: toast-progress var(--toast-default-duration) linear forwards;
+}
+
+@keyframes toast-progress {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST — Type: Success
+   ═══════════════════════════════════════════════════════════ */
+
+.toast-success {
+  border-color: var(--color-success-border);
+}
+
+.toast-success .toast-icon {
+  color: var(--color-success);
+}
+
+.toast-success .toast-progress::after {
+  background-color: var(--color-success);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST — Type: Error
+   ═══════════════════════════════════════════════════════════ */
+
+.toast-error {
+  border-color: var(--color-error-border);
+}
+
+.toast-error .toast-icon {
+  color: var(--color-error);
+}
+
+.toast-error .toast-progress::after {
+  background-color: var(--color-error);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST — Type: Warning
+   ═══════════════════════════════════════════════════════════ */
+
+.toast-warning {
+  border-color: var(--color-warning-border);
+}
+
+.toast-warning .toast-icon {
+  color: var(--color-warning);
+}
+
+.toast-warning .toast-progress::after {
+  background-color: var(--color-warning);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST — Type: Info
+   ═══════════════════════════════════════════════════════════ */
+
+.toast-info {
+  border-color: var(--color-info-border);
+}
+
+.toast-info .toast-icon {
+  color: var(--color-info);
+}
+
+.toast-info .toast-progress::after {
+  background-color: var(--color-info);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST — Type: Neutral
+   ═══════════════════════════════════════════════════════════ */
+
+.toast-neutral .toast-icon {
+  color: var(--color-neutral-500);
+}
+
+.toast-neutral .toast-progress::after {
+  background-color: var(--color-neutral-400);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST — Type: Loading (no auto-dismiss, spinner icon)
+   ═══════════════════════════════════════════════════════════ */
+
+.toast-loading {
+  border-color: var(--color-neutral-200);
+}
+
+.toast-loading .toast-icon {
+  color: var(--color-neutral-500);
+  animation: toast-spinner-spin var(--anim-spin-duration) linear infinite;
+}
+
+.toast-loading .toast-progress {
+  display: none;
+}
+
+@keyframes toast-spinner-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NOTIFICATION PANEL
+   ═══════════════════════════════════════════════════════════ */
+
+.notification-panel {
+  width: var(--notif-panel-width);
+  max-height: var(--notif-panel-max-height);
+  background-color: var(--toast-bg);
+  border: var(--border-width) solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.notification-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-neutral-100);
+  flex-shrink: 0;
+}
+
+.notification-panel-header h3 {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.notification-mark-all {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--color-accent-600);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--duration-fast) var(--ease-in-out),
+              color var(--duration-fast) var(--ease-in-out);
+}
+
+.notification-mark-all:hover {
+  background-color: var(--color-accent-50);
+  color: var(--color-accent-700);
+}
+
+/* ── List container ───────────────────────────────────────── */
+.notification-list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ── Group label ──────────────────────────────────────────── */
+.notification-group-label {
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  border-bottom: var(--border-width) solid var(--color-neutral-100);
+  background-color: var(--color-neutral-50);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-raised);
+}
+
+/* ── Notification item ────────────────────────────────────── */
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  cursor: pointer;
+  border-bottom: var(--border-width) solid var(--color-neutral-50);
+  transition: background-color var(--duration-fast) var(--ease-in-out);
+  position: relative;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item:hover {
+  background-color: var(--color-neutral-50);
+}
+
+/* Unread state */
+.notification-unread {
+  background-color: var(--color-info-light);
+}
+
+.notification-unread:hover {
+  background-color: var(--color-info-light);
+}
+
+.notification-unread-dot {
+  position: absolute;
+  left: var(--space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-info);
+  flex-shrink: 0;
+}
+
+/* When unread: shift content to make room for dot */
+.notification-unread .notification-avatar,
+.notification-unread .notification-content,
+.notification-unread .notification-time-indicator {
+  margin-left: var(--space-2);
+}
+
+/* ── Avatar ───────────────────────────────────────────────── */
+.notification-avatar {
+  flex-shrink: 0;
+  width: var(--notif-avatar-size);
+  height: var(--notif-avatar-size);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-neutral-200);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--color-neutral-500);
+  overflow: hidden;
+}
+
+.notification-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Content ──────────────────────────────────────────────── */
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-text {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-800);
+  line-height: var(--leading-snug);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.notification-text strong {
+  font-weight: var(--font-semibold);
+  color: var(--color-neutral-900);
+}
+
+.notification-time {
+  font-size: var(--text-xs);
+  color: var(--color-neutral-400);
+}
+
+/* ── Time indicator (right side) ──────────────────────────── */
+.notification-time-indicator {
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-400);
+  margin-top: var(--space-0-5);
+  white-space: nowrap;
+}
+
+/* ── Empty state ──────────────────────────────────────────── */
+.notification-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12) var(--space-8);
+  text-align: center;
+  gap: var(--space-3);
+}
+
+.notification-empty svg {
+  width: var(--notif-avatar-size);
+  height: var(--notif-avatar-size);
+  color: var(--color-neutral-300);
+}
+
+.notification-empty p {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+  margin: 0;
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+.notification-panel-footer {
+  padding: var(--space-3) var(--space-4);
+  border-top: var(--border-width) solid var(--color-neutral-100);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.notification-panel-footer a {
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--color-accent-600);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-in-out);
+}
+
+.notification-panel-footer a:hover {
+  color: var(--color-accent-700);
+  text-decoration: underline;
+}

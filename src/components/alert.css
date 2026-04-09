@@ -1,0 +1,659 @@
+/* ============================================================
+   ELEGANT MINIMALIST UI KIT — Alert Banner, Inline Message
+   & Page Banner Components
+   alert.css
+
+   ANATOMY — ALERT BANNER
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="alert alert-subtle alert-success">
+       <svg class="alert-icon">…</svg>
+       <div class="alert-body">
+         <strong class="alert-title">Success!</strong>
+         <p class="alert-desc">Your changes have been saved.</p>
+         <!-- optional: list of items -->
+         <ul class="alert-list">
+           <li>Item one</li>
+         </ul>
+         <!-- optional: action link/button -->
+         <a class="alert-action" href="#">View details</a>
+       </div>
+       <button class="alert-close" aria-label="Dismiss">
+         <svg>×</svg>
+       </button>
+     </div>
+
+   Class layers:
+     1. .alert                 → Base layout
+     2. .alert-{variant}       → Style (subtle/filled/outline)
+     3. .alert-{type}          → Color (success/error/warning/info/neutral)
+     4. .alert-compact        → Smaller padding
+     5. .alert-icon             → Type-appropriate SVG icon
+     6. .alert-body             → Title + desc + optional list/action
+     7. .alert-close            → Dismiss button
+     8. .alert-action           → CTA link/button
+   ─────────────────────────────────────────────────────────────
+
+   ANATOMY — INLINE MESSAGE
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="inline-message inline-message-success">
+       <svg class="inline-message-icon">…</svg>
+       <span class="inline-message-text">Saved.</span>
+     </div>
+   ─────────────────────────────────────────────────────────────
+
+   ANATOMY — PAGE BANNER
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="page-banner">
+       <span class="page-banner-text">Maintenance notice…</span>
+       <a class="page-banner-action" href="#">Learn more</a>
+       <button class="page-banner-close" aria-label="Dismiss">
+         <svg>×</svg>
+       </button>
+     </div>
+   ─────────────────────────────────────────────────────────────
+   ============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   ICON SVGs — Shared for alert types
+   ═══════════════════════════════════════════════════════════ */
+
+.alert-icon-svg {
+  width: var(--alert-icon-size);
+  height: var(--alert-icon-size);
+  flex-shrink: 0;
+  margin-top: var(--space-0-5);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ALERT — Base
+   ═══════════════════════════════════════════════════════════ */
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--alert-padding);
+  border-radius: var(--alert-radius);
+  font-size: var(--alert-font-size);
+  line-height: var(--leading-relaxed);
+  position: relative;
+  overflow: hidden;
+  max-height: var(--alert-max-h);
+  opacity: 1;
+  transition: max-height var(--alert-slide-duration) var(--ease-out),
+              opacity var(--alert-slide-duration) var(--ease-in-out),
+              margin-bottom var(--alert-slide-duration) var(--ease-out),
+              padding-top var(--alert-slide-duration) var(--ease-out),
+              padding-bottom var(--alert-slide-duration) var(--ease-out);
+}
+
+/* Dismiss animation: slide up + fade out + collapse */
+.alert.is-dismissing {
+  max-height: 0;
+  opacity: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  pointer-events: none;
+}
+
+/* Entrance animation */
+.alert.is-entering {
+  animation: alert-slide-in var(--alert-slide-duration) var(--ease-out) forwards;
+}
+
+@keyframes alert-slide-in {
+  from {
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    max-height: var(--alert-max-h);
+    opacity: 1;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ALERT — Body
+   ═══════════════════════════════════════════════════════════ */
+
+.alert-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.alert-title {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-0-5);
+}
+
+.alert-desc {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+.alert-desc + .alert-list {
+  margin-top: var(--space-2);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ALERT — List of items
+   ═══════════════════════════════════════════════════════════ */
+
+.alert-list {
+  margin: var(--space-2) 0 0 0;
+  padding-left: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.alert-list li {
+  margin-bottom: var(--space-0-5);
+}
+
+.alert-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ALERT — Action link/button
+   ═══════════════════════════════════════════════════════════ */
+
+.alert-action {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  text-decoration: underline;
+  text-underline-offset: var(--space-0-5);
+  cursor: pointer;
+  margin-top: var(--space-2);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.alert-action:hover {
+  text-decoration-thickness: var(--alert-hover-underline);
+}
+
+.alert-desc + .alert-action {
+  margin-top: var(--space-1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ALERT — Close/dismiss button
+   ═══════════════════════════════════════════════════════════ */
+
+.alert-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--duration-fast) var(--ease-in-out),
+              color var(--duration-fast) var(--ease-in-out);
+}
+
+.alert-close svg {
+  width: var(--space-3-5);
+  height: var(--space-3-5);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ALERT — Variant: Subtle
+   Light background + thick left accent border
+   ═══════════════════════════════════════════════════════════ */
+
+.alert-subtle {
+  border: var(--border-width) solid transparent;
+  border-left: var(--alert-border-accent) solid;
+}
+
+/* Subtle type colors */
+.alert-subtle.alert-success {
+  background-color: var(--alert-subtle-success-bg);
+  border-left-color: var(--alert-subtle-success-accent);
+}
+
+.alert-subtle.alert-success .alert-icon-svg {
+  color: var(--alert-subtle-success-accent);
+}
+
+.alert-subtle.alert-success .alert-action {
+  color: var(--alert-subtle-success-accent);
+}
+
+.alert-subtle.alert-error {
+  background-color: var(--alert-subtle-error-bg);
+  border-left-color: var(--alert-subtle-error-accent);
+}
+
+.alert-subtle.alert-error .alert-icon-svg {
+  color: var(--alert-subtle-error-accent);
+}
+
+.alert-subtle.alert-error .alert-action {
+  color: var(--alert-subtle-error-accent);
+}
+
+.alert-subtle.alert-warning {
+  background-color: var(--alert-subtle-warning-bg);
+  border-left-color: var(--alert-subtle-warning-accent);
+}
+
+.alert-subtle.alert-warning .alert-icon-svg {
+  color: var(--alert-subtle-warning-accent);
+}
+
+.alert-subtle.alert-warning .alert-action {
+  color: var(--alert-subtle-warning-accent);
+}
+
+.alert-subtle.alert-info {
+  background-color: var(--alert-subtle-info-bg);
+  border-left-color: var(--alert-subtle-info-accent);
+}
+
+.alert-subtle.alert-info .alert-icon-svg {
+  color: var(--alert-subtle-info-accent);
+}
+
+.alert-subtle.alert-info .alert-action {
+  color: var(--alert-subtle-info-accent);
+}
+
+.alert-subtle.alert-neutral {
+  background-color: var(--alert-subtle-neutral-bg);
+  border-left-color: var(--alert-subtle-neutral-accent);
+}
+
+.alert-subtle.alert-neutral .alert-icon-svg {
+  color: var(--alert-subtle-neutral-accent);
+}
+
+.alert-subtle.alert-neutral .alert-action {
+  color: var(--color-neutral-600);
+}
+
+/* Subtle close button colors per type */
+.alert-subtle.alert-success .alert-close { color: var(--color-success-dark); }
+.alert-subtle.alert-success .alert-close:hover { background-color: var(--color-success-border); }
+
+.alert-subtle.alert-error .alert-close { color: var(--color-error-dark); }
+.alert-subtle.alert-error .alert-close:hover { background-color: var(--color-error-border); }
+
+.alert-subtle.alert-warning .alert-close { color: var(--color-warning-dark); }
+.alert-subtle.alert-warning .alert-close:hover { background-color: var(--color-warning-border); }
+
+.alert-subtle.alert-info .alert-close { color: var(--color-info-dark); }
+.alert-subtle.alert-info .alert-close:hover { background-color: var(--color-info-border); }
+
+.alert-subtle.alert-neutral .alert-close { color: var(--color-neutral-600); }
+.alert-subtle.alert-neutral .alert-close:hover { background-color: var(--color-neutral-200); }
+
+/* ═══════════════════════════════════════════════════════════
+   ALERT — Variant: Filled
+   Full background color, white text
+   ═══════════════════════════════════════════════════════════ */
+
+.alert-filled {
+  border: none;
+  color: var(--color-neutral-50);
+}
+
+.alert-filled.alert-success {
+  background-color: var(--alert-filled-success-bg);
+}
+
+.alert-filled.alert-error {
+  background-color: var(--alert-filled-error-bg);
+}
+
+.alert-filled.alert-warning {
+  background-color: var(--alert-filled-warning-bg);
+  color: var(--color-neutral-900);
+}
+
+.alert-filled.alert-info {
+  background-color: var(--alert-filled-info-bg);
+}
+
+.alert-filled.alert-neutral {
+  background-color: var(--alert-filled-neutral-bg);
+}
+
+/* Filled text overrides */
+.alert-filled .alert-title {
+  color: inherit;
+}
+
+.alert-filled .alert-desc {
+  color: inherit;
+  opacity: 0.9;
+}
+
+.alert-filled .alert-list {
+  color: inherit;
+  opacity: 0.9;
+}
+
+.alert-filled .alert-icon-svg {
+  color: inherit;
+}
+
+.alert-filled .alert-action {
+  color: inherit;
+  text-decoration-color: rgba(255, 255, 255, 0.5);
+}
+
+.alert-filled .alert-action:hover {
+  text-decoration-color: rgba(255, 255, 255, 0.8);
+}
+
+.alert-filled.alert-warning .alert-action {
+  text-decoration-color: rgba(0, 0, 0, 0.3);
+}
+
+.alert-filled .alert-close {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.alert-filled .alert-close:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  opacity: 1;
+}
+
+.alert-filled.alert-warning .alert-close:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ALERT — Variant: Outline
+   Border only, no colored background
+   ═══════════════════════════════════════════════════════════ */
+
+.alert-outline {
+  background-color: transparent;
+  border: var(--border-width) solid;
+}
+
+.alert-outline.alert-success {
+  border-color: var(--color-success-border);
+}
+
+.alert-outline.alert-success .alert-icon-svg {
+  color: var(--color-success);
+}
+
+.alert-outline.alert-success .alert-action {
+  color: var(--color-success);
+}
+
+.alert-outline.alert-error {
+  border-color: var(--color-error-border);
+}
+
+.alert-outline.alert-error .alert-icon-svg {
+  color: var(--color-error);
+}
+
+.alert-outline.alert-error .alert-action {
+  color: var(--color-error);
+}
+
+.alert-outline.alert-warning {
+  border-color: var(--color-warning-border);
+}
+
+.alert-outline.alert-warning .alert-icon-svg {
+  color: var(--color-warning);
+}
+
+.alert-outline.alert-warning .alert-action {
+  color: var(--color-warning);
+}
+
+.alert-outline.alert-info {
+  border-color: var(--color-info-border);
+}
+
+.alert-outline.alert-info .alert-icon-svg {
+  color: var(--color-info);
+}
+
+.alert-outline.alert-info .alert-action {
+  color: var(--color-info);
+}
+
+.alert-outline.alert-neutral {
+  border-color: var(--color-neutral-300);
+}
+
+.alert-outline.alert-neutral .alert-icon-svg {
+  color: var(--color-neutral-500);
+}
+
+.alert-outline.alert-neutral .alert-action {
+  color: var(--color-neutral-600);
+}
+
+.alert-outline .alert-close {
+  color: var(--color-neutral-500);
+}
+
+.alert-outline .alert-close:hover {
+  background-color: var(--color-neutral-100);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ALERT — Size: Compact
+   ═══════════════════════════════════════════════════════════ */
+
+.alert-compact {
+  padding: var(--alert-padding-compact);
+  gap: var(--space-2);
+}
+
+.alert-compact .alert-icon-svg {
+  width: var(--space-4);
+  height: var(--space-4);
+  margin-top: 0;
+}
+
+.alert-compact .alert-title {
+  font-size: var(--text-sm);
+  margin-bottom: 0;
+}
+
+.alert-compact .alert-desc {
+  font-size: var(--text-sm);
+}
+
+.alert-compact .alert-action {
+  margin-top: var(--space-1);
+}
+
+.alert-compact .alert-close {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.alert-compact .alert-close svg {
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INLINE MESSAGE — Mini alert for inside components
+   ═══════════════════════════════════════════════════════════ */
+
+.inline-message {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  font-family: var(--font-sans);
+  font-size: var(--inline-msg-font-size);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-tight);
+}
+
+.inline-message-icon {
+  width: var(--inline-msg-icon-size);
+  height: var(--inline-msg-icon-size);
+  flex-shrink: 0;
+}
+
+/* Inline message type colors */
+.inline-message-success {
+  color: var(--color-success);
+}
+
+.inline-message-error {
+  color: var(--color-error);
+}
+
+.inline-message-warning {
+  color: var(--color-warning);
+}
+
+.inline-message-info {
+  color: var(--color-info);
+}
+
+.inline-message-neutral {
+  color: var(--color-neutral-500);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE BANNER — Full-width banner above content
+   ═══════════════════════════════════════════════════════════ */
+
+.page-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--page-banner-padding);
+  background-color: var(--page-banner-bg);
+  color: var(--page-banner-color);
+  font-family: var(--font-sans);
+  font-size: var(--page-banner-font-size);
+  line-height: var(--leading-tight);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-overlay);
+  overflow: hidden;
+  max-height: var(--page-banner-max-h);
+  opacity: 1;
+  transition: max-height var(--alert-slide-duration) var(--ease-out),
+              opacity var(--alert-slide-duration) var(--ease-in-out),
+              padding-top var(--alert-slide-duration) var(--ease-out),
+              padding-bottom var(--alert-slide-duration) var(--ease-out);
+}
+
+.page-banner.is-dismissing {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  pointer-events: none;
+}
+
+.page-banner-text {
+  flex: 1;
+  text-align: center;
+  max-width: var(--page-banner-text-max);
+}
+
+.page-banner-text strong {
+  font-weight: var(--font-semibold);
+}
+
+.page-banner-action {
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: var(--space-0-5);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: opacity var(--duration-fast) var(--ease-in-out);
+}
+
+.page-banner-action:hover {
+  opacity: 0.8;
+  text-decoration-thickness: var(--alert-hover-underline);
+}
+
+.page-banner-close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity var(--duration-fast) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-in-out);
+}
+
+.page-banner-close:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.page-banner-close svg {
+  width: var(--space-3-5);
+  height: var(--space-3-5);
+}
+
+/* Page banner color variants */
+.page-banner-success {
+  background-color: var(--color-success);
+}
+
+.page-banner-error {
+  background-color: var(--color-error);
+}
+
+.page-banner-warning {
+  background-color: var(--color-warning);
+  color: var(--color-neutral-900);
+}
+
+.page-banner-info {
+  background-color: var(--color-info);
+}
+
+.page-banner-neutral {
+  background-color: var(--color-neutral-700);
+}

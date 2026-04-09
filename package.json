@@ -1,0 +1,45 @@
+{
+  "name": "minora",
+  "version": "0.1.0",
+  "description": "Elegant minimalist UI kit — clean components with warm gold accent, zero dependencies, CDN-ready",
+  "main": "dist/minora.css",
+  "style": "dist/minora.css",
+  "unpkg": "dist/minora.min.css",
+  "jsdelivr": "dist/minora.min.css",
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build:css": "node build.mjs css",
+    "build:js": "node build.mjs js",
+    "build:all": "node build.mjs all",
+    "watch": "node build.mjs watch"
+  },
+  "keywords": [
+    "ui-kit",
+    "css-components",
+    "minimalist",
+    "design-system",
+    "vanilla-js",
+    "tailwind-compatible",
+    "custom-properties",
+    "cdn",
+    "no-dependencies"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/minora.git"
+  },
+  "bugs": {
+    "url": "https://github.com/username/minora/issues"
+  },
+  "homepage": "https://minora-ui.com",
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "csso": "^5.0.5",
+    "terser": "^5.31.0"
+  }
+}

@@ -1,0 +1,625 @@
+/* ============================================================
+   ELEGANT MINIMALIST UI KIT — Input & Textarea Components
+   input.css
+
+   ANATOMY — INPUT GROUP
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="input-group">
+       <label class="input-label" for="...">
+         Email <span class="input-required">*</span>
+       </label>
+       <div class="input-wrapper">
+         <!-- optional: icon/Addon prefix -->
+         <svg class="input-icon-leading">...</svg>
+         <span class="input-addon">https://</span>
+
+         <!-- The actual input -->
+         <input class="input input-md" id="..." type="text" />
+
+         <!-- optional: icon/button suffix -->
+         <button class="input-icon-trailing input-clear">...</button>
+         <span class="input-addon">.com</span>
+       </div>
+       <!-- optional: helper / error / counter text -->
+       <span class="input-helper">Helper text</span>
+       <span class="input-message input-message-error">Error msg</span>
+       <span class="input-counter">0 / 50</span>
+     </div>
+
+   Class layers:
+     1. .input-group          → Wrapper for label + input + helper
+     2. .input                → Base reset, layout, typography
+     3. .input-{variant}      → Style (default/filled/underline)
+     4. .input-{size}         → Height, padding, font-size
+     5. .input-{state}        → Error/success/warning/disabled/readonly
+     6. .input-wrapper        → Flex container for addons + input
+     7. .input-icon-leading   → Prefix icon (SVG)
+     8. .input-icon-trailing  → Suffix icon/button (eye toggle, clear)
+     9. .input-addon          → Text prefix/suffix
+    10. .input-label          → Label above input
+    11. .input-helper          → Helper text below input
+    12. .input-message         → Validation message (error/success/warning)
+    13. .input-counter         → Character counter
+   ─────────────────────────────────────────────────────────────
+
+   ANATOMY — TEXTAREA
+   ─────────────────────────────────────────────────────────────
+   Structure: same as input but uses .textarea class instead.
+     <div class="input-group">
+       <label class="input-label" for="...">Bio</label>
+       <textarea class="textarea textarea-md" id="..."></textarea>
+       <span class="input-helper">Optional helper</span>
+     </div>
+   ─────────────────────────────────────────────────────────────
+   ============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT GROUP — Wrapper
+   ═══════════════════════════════════════════════════════════ */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT LABEL
+   ═══════════════════════════════════════════════════════════ */
+
+.input-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--input-label-color);
+  line-height: var(--leading-tight);
+}
+
+.input-label .input-required {
+  color: var(--color-error);
+  margin-left: var(--space-0-5);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT WRAPPER — flex container for addons + input
+   ═══════════════════════════════════════════════════════════ */
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--border-color);
+  background-color: var(--input-bg);
+  transition: border-color var(--duration-fast) var(--ease-in-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+  overflow: hidden;
+}
+
+/* Focus state on wrapper (triggered when child input:focus) */
+.input-wrapper:has(.input:focus),
+.input-wrapper:has(.textarea:focus) {
+  border-color: var(--input-focus-color);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-color);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT — Base
+   ═══════════════════════════════════════════════════════════ */
+
+.input {
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-regular);
+  color: var(--input-text-color);
+  line-height: var(--leading-none);
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.input::placeholder {
+  color: var(--input-placeholder-color);
+}
+
+.input:focus {
+  outline: none;
+}
+
+/* Disabled */
+.input:disabled {
+  opacity: var(--input-disabled-opacity);
+  cursor: var(--input-disabled-cursor);
+}
+
+/* Readonly */
+.input:read-only {
+  background-color: var(--input-addon-bg);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT — Sizes
+   ═══════════════════════════════════════════════════════════ */
+
+.input-sm {
+  min-height: var(--input-sm-height);
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-3);
+}
+
+.input-md {
+  min-height: var(--input-md-height);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-4);
+}
+
+.input-lg {
+  min-height: var(--input-lg-height);
+  font-size: var(--text-base);
+  padding: var(--space-2-5) var(--space-4);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT — Variants
+   ═══════════════════════════════════════════════════════════ */
+
+/* Default (bordered) — base style is already this */
+
+/* Filled (subtle background, no border) */
+.input-filled {
+  border-color: transparent;
+  background-color: var(--input-filled-bg);
+}
+
+.input-filled.input-wrapper {
+  border-color: transparent;
+  background-color: var(--input-filled-bg);
+}
+
+.input-filled.input-wrapper:has(.input:focus),
+.input-filled.input-wrapper:has(.textarea:focus) {
+  border-color: transparent;
+  background-color: var(--input-bg);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-color);
+}
+
+/* Underline (only bottom border) */
+.input-underline.input-wrapper {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: var(--border-color);
+  border-radius: var(--radius-none);
+  background-color: transparent;
+}
+
+.input-underline.input-wrapper:has(.input:focus),
+.input-underline.input-wrapper:has(.textarea:focus) {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: var(--input-focus-color);
+  box-shadow: none;
+}
+
+.input-underline .input {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT — Semantic States (Error, Success, Warning)
+   Applied on the .input-wrapper
+   ═══════════════════════════════════════════════════════════ */
+
+/* Error */
+.input-error.input-wrapper {
+  border-color: var(--color-error);
+}
+
+.input-error.input-wrapper:has(.input:focus),
+.input-error.input-wrapper:has(.textarea:focus) {
+  border-color: var(--input-focus-error);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-error);
+}
+
+.input-error.input-filled.input-wrapper {
+  border-color: transparent;
+}
+
+.input-error.input-filled.input-wrapper:has(.input:focus),
+.input-error.input-filled.input-wrapper:has(.textarea:focus) {
+  border-color: transparent;
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-error);
+}
+
+.input-error.input-underline.input-wrapper {
+  border-bottom-color: var(--color-error);
+}
+
+.input-error.input-underline.input-wrapper:has(.input:focus),
+.input-error.input-underline.input-wrapper:has(.textarea:focus) {
+  border-bottom-color: var(--input-focus-error);
+  box-shadow: none;
+}
+
+/* Success */
+.input-success.input-wrapper {
+  border-color: var(--color-success);
+}
+
+.input-success.input-wrapper:has(.input:focus),
+.input-success.input-wrapper:has(.textarea:focus) {
+  border-color: var(--input-focus-success);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-success);
+}
+
+.input-success.input-filled.input-wrapper {
+  border-color: transparent;
+}
+
+.input-success.input-filled.input-wrapper:has(.input:focus),
+.input-success.input-filled.input-wrapper:has(.textarea:focus) {
+  border-color: transparent;
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-success);
+}
+
+.input-success.input-underline.input-wrapper {
+  border-bottom-color: var(--color-success);
+}
+
+.input-success.input-underline.input-wrapper:has(.input:focus),
+.input-success.input-underline.input-wrapper:has(.textarea:focus) {
+  border-bottom-color: var(--input-focus-success);
+  box-shadow: none;
+}
+
+/* Warning */
+.input-warning.input-wrapper {
+  border-color: var(--color-warning);
+}
+
+.input-warning.input-wrapper:has(.input:focus),
+.input-warning.input-wrapper:has(.textarea:focus) {
+  border-color: var(--input-focus-warning);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-warning);
+}
+
+.input-warning.input-filled.input-wrapper {
+  border-color: transparent;
+}
+
+.input-warning.input-filled.input-wrapper:has(.input:focus),
+.input-warning.input-filled.input-wrapper:has(.textarea:focus) {
+  border-color: transparent;
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-warning);
+}
+
+.input-warning.input-underline.input-wrapper {
+  border-bottom-color: var(--color-warning);
+}
+
+.input-warning.input-underline.input-wrapper:has(.input:focus),
+.input-warning.input-underline.input-wrapper:has(.textarea:focus) {
+  border-bottom-color: var(--input-focus-warning);
+  box-shadow: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT — Icons (Leading & Trailing)
+   ═══════════════════════════════════════════════════════════ */
+
+.input-icon-leading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--input-icon-color);
+  margin-left: var(--space-3);
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.input-icon-leading svg {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.input-icon-trailing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--input-icon-color);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: var(--space-4);
+  height: var(--space-4);
+  margin-right: var(--space-3);
+  transition: color var(--duration-fast) var(--ease-in-out);
+}
+
+.input-icon-trailing svg {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.input-icon-trailing:hover {
+  color: var(--color-neutral-600);
+}
+
+/* Password eye toggle */
+.input-icon-trailing:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* Clear button (X) — hidden by default, shown via JS */
+.input-clear {
+  display: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-in-out),
+              color var(--duration-fast) var(--ease-in-out);
+}
+
+.input-clear.is-visible {
+  display: inline-flex;
+  opacity: 1;
+}
+
+.input-clear:hover {
+  color: var(--color-neutral-700);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT — Addon (text prefix/suffix)
+   ═══════════════════════════════════════════════════════════ */
+
+.input-addon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-regular);
+  color: var(--input-addon-text-color);
+  background-color: var(--input-addon-bg);
+  line-height: var(--leading-none);
+  padding: var(--space-1) var(--space-2-5);
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.input-addon:first-child {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  border-right: var(--border-width) solid var(--border-color);
+  padding-right: var(--space-2);
+}
+
+.input-addon:last-child {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border-left: var(--border-width) solid var(--border-color);
+  padding-left: var(--space-2);
+}
+
+/* Adjust input padding when addons present */
+.input-wrapper:has(.input-icon-leading) .input {
+  padding-left: var(--space-1);
+}
+
+.input-wrapper:has(.input-icon-trailing) .input {
+  padding-right: var(--space-1);
+}
+
+.input-wrapper:has(.input-addon:first-child) .input,
+.input-wrapper .input-addon + .input {
+  padding-left: var(--space-1);
+}
+
+.input-wrapper:has(.input-addon:last-child) .input,
+.input-wrapper .input + .input-addon {
+  padding-right: var(--space-1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT — Helper text
+   ═══════════════════════════════════════════════════════════ */
+
+.input-helper {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--input-helper-color);
+  line-height: var(--leading-tight);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT — Validation messages (error/success/warning)
+   ═══════════════════════════════════════════════════════════ */
+
+.input-message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-tight);
+}
+
+.input-message svg {
+  width: var(--space-3);
+  height: var(--space-3);
+  flex-shrink: 0;
+}
+
+.input-message-error {
+  color: var(--color-error);
+}
+
+.input-message-error svg {
+  color: var(--color-error);
+}
+
+.input-message-success {
+  color: var(--color-success);
+}
+
+.input-message-success svg {
+  color: var(--color-success);
+}
+
+.input-message-warning {
+  color: var(--color-warning);
+}
+
+.input-message-warning svg {
+  color: var(--color-warning);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT — Character counter
+   ═══════════════════════════════════════════════════════════ */
+
+.input-counter {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--input-helper-color);
+  line-height: var(--leading-tight);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  -moz-font-feature-settings: 'tnum';
+  font-feature-settings: 'tnum';
+}
+
+.input-counter.limit-near {
+  color: var(--color-warning);
+}
+
+.input-counter.limit-reached {
+  color: var(--color-error);
+  font-weight: var(--font-semibold);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TEXTAREA
+   ═══════════════════════════════════════════════════════════ */
+
+.textarea {
+  display: block;
+  width: 100%;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-regular);
+  color: var(--input-text-color);
+  line-height: var(--leading-relaxed);
+  padding: var(--space-2) var(--space-3);
+  outline: none;
+  resize: vertical;
+  min-height: calc(var(--textarea-min-rows) * 1.625 * var(--text-sm) + var(--space-4));
+  max-height: calc(var(--textarea-max-rows) * 1.625 * var(--text-sm) + var(--space-4));
+  transition: border-color var(--duration-fast) var(--ease-in-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+  overflow-y: auto;
+}
+
+.textarea::placeholder {
+  color: var(--input-placeholder-color);
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--input-focus-color);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-color);
+}
+
+.textarea:disabled {
+  opacity: var(--input-disabled-opacity);
+  cursor: var(--input-disabled-cursor);
+  resize: none;
+}
+
+.textarea:read-only {
+  background-color: var(--input-addon-bg);
+}
+
+/* Textarea sizes */
+.textarea-sm {
+  font-size: var(--text-sm);
+  padding: var(--space-1-5) var(--space-3);
+}
+
+.textarea-md {
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+.textarea-lg {
+  font-size: var(--text-base);
+  padding: var(--space-2-5) var(--space-4);
+}
+
+/* Textarea semantic states */
+.textarea-error {
+  border-color: var(--color-error);
+}
+
+.textarea-error:focus {
+  border-color: var(--input-focus-error);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-error);
+}
+
+.textarea-success {
+  border-color: var(--color-success);
+}
+
+.textarea-success:focus {
+  border-color: var(--input-focus-success);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-success);
+}
+
+.textarea-warning {
+  border-color: var(--color-warning);
+}
+
+.textarea-warning:focus {
+  border-color: var(--input-focus-warning);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--input-focus-warning);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DISABLED STATE ON GROUP
+   ═══════════════════════════════════════════════════════════ */
+
+.input-group.is-disabled {
+  opacity: var(--input-disabled-opacity);
+  pointer-events: none;
+}
+
+.input-group.is-disabled .input-wrapper {
+  cursor: var(--input-disabled-cursor);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   READONLY STATE ON GROUP
+   ═══════════════════════════════════════════════════════════ */
+
+.input-group.is-readonly .input-wrapper {
+  background-color: var(--input-addon-bg);
+  cursor: default;
+}

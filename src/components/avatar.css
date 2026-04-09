@@ -1,0 +1,463 @@
+/* ============================================================
+   ELEGANT MINIMALIST UI KIT — Avatar & Avatar Group Components
+   avatar.css
+
+   ANATOMY — SINGLE AVATAR
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="avatar avatar-md">
+       <img src="..." alt="..." class="avatar-img" />
+       <div class="avatar-status" data-status="online"></div>  <!-- optional -->
+     </div>
+
+     <!-- Initials fallback (auto-generated via JS from data-name) -->
+     <div class="avatar avatar-md" data-name="Budi Santoso">
+       <span class="avatar-initials">BS</span>
+     </div>
+
+     <!-- Icon fallback -->
+     <div class="avatar avatar-md">
+       <svg class="avatar-fallback" ...></svg>
+     </div>
+
+   Class layers:
+     1. .avatar                → Base layout, shape, overflow hidden
+     2. .avatar-{size}         → Width, height, font-size
+     3. .avatar-img            → Image styling (object-fit: cover)
+     4. .avatar-initials       → Text initials styling
+     5. .avatar-fallback       → Generic person icon SVG
+     6. .avatar-status         → Status dot indicator
+     7. .avatar-rounded        → Modifier: rounded square instead of circle
+   ─────────────────────────────────────────────────────────────
+
+   ANATOMY — AVATAR GROUP
+   ─────────────────────────────────────────────────────────────
+   Structure:
+     <div class="avatar-group avatar-group-md">
+       <div class="avatar avatar-md">...</div>
+       <div class="avatar avatar-md">...</div>
+       <div class="avatar avatar-md">...</div>
+       <span class="avatar-group-counter">+12</span>
+     </div>
+
+   Class layers:
+     1. .avatar-group          → Base flex layout
+     2. .avatar-group-{size}   → Controls child avatar sizes
+     3. .avatar-group-item     → Wrapper for negative margin overlap
+     4. .avatar-group-counter  → "+N" overflow indicator
+   ─────────────────────────────────────────────────────────────
+   ============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   AVATAR — Base
+   ═══════════════════════════════════════════════════════════ */
+
+.avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background-color: var(--color-neutral-200);
+  vertical-align: middle;
+}
+
+/* ── Avatar image ───────────────────────────────────────── */
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Avatar initials ────────────────────────────────────── */
+.avatar-initials {
+  font-family: var(--font-sans);
+  font-weight: var(--font-semibold);
+  color: var(--color-neutral-50);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  line-height: var(--leading-none);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Avatar icon fallback ───────────────────────────────── */
+.avatar-fallback {
+  color: var(--color-neutral-400);
+  line-height: 0;
+}
+
+/* ── Sizes ──────────────────────────────────────────────── */
+.avatar-xs {
+  width: var(--space-6);
+  height: var(--space-6);
+}
+
+.avatar-xs .avatar-initials {
+  font-size: var(--text-xs);
+}
+
+.avatar-xs .avatar-fallback {
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+.avatar-sm {
+  width: var(--space-8);
+  height: var(--space-8);
+}
+
+.avatar-sm .avatar-initials {
+  font-size: var(--text-xs);
+}
+
+.avatar-sm .avatar-fallback {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.avatar-md {
+  width: var(--space-10);
+  height: var(--space-10);
+}
+
+.avatar-md .avatar-initials {
+  font-size: var(--text-sm);
+}
+
+.avatar-md .avatar-fallback {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.avatar-lg {
+  width: var(--space-14);
+  height: var(--space-14);
+}
+
+.avatar-lg .avatar-initials {
+  font-size: var(--text-lg);
+}
+
+.avatar-lg .avatar-fallback {
+  width: var(--space-7);
+  height: var(--space-7);
+}
+
+.avatar-xl {
+  width: var(--space-20);
+  height: var(--space-20);
+}
+
+.avatar-xl .avatar-initials {
+  font-size: var(--text-3xl);
+}
+
+.avatar-xl .avatar-fallback {
+  width: var(--space-10);
+  height: var(--space-10);
+}
+
+/* ── Shape: Rounded square modifier ─────────────────────── */
+.avatar-rounded {
+  border-radius: var(--radius-md);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AVATAR — Status indicator
+   ═══════════════════════════════════════════════════════════ */
+
+.avatar-status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: block;
+  border-radius: var(--radius-pill);
+  border: var(--border-width-2) solid var(--avatar-group-border);
+  z-index: var(--z-raised);
+  line-height: 0;
+}
+
+/* Status dot — size varies by avatar size */
+.avatar-status::after {
+  content: '';
+  display: block;
+  border-radius: var(--radius-pill);
+}
+
+/* Status colors */
+.avatar-status[data-status="online"] {
+  background-color: var(--color-success);
+}
+
+.avatar-status[data-status="away"] {
+  background-color: var(--color-warning);
+}
+
+.avatar-status[data-status="busy"] {
+  background-color: var(--color-error);
+}
+
+.avatar-status[data-status="offline"] {
+  background-color: var(--color-neutral-400);
+}
+
+/* Status dot sizing per avatar size */
+.avatar-xs .avatar-status {
+  width: var(--avatar-status-xs-size);
+  height: var(--avatar-status-xs-size);
+  border-width: var(--avatar-status-xs-border);
+}
+
+.avatar-xs .avatar-status::after {
+  width: var(--avatar-status-xs-dot);
+  height: var(--avatar-status-xs-dot);
+}
+
+.avatar-sm .avatar-status {
+  width: var(--avatar-status-sm-size);
+  height: var(--avatar-status-sm-size);
+  border-width: var(--avatar-status-sm-border);
+}
+
+.avatar-sm .avatar-status::after {
+  width: var(--avatar-status-sm-dot);
+  height: var(--avatar-status-sm-dot);
+}
+
+.avatar-md .avatar-status {
+  width: var(--avatar-status-md-size);
+  height: var(--avatar-status-md-size);
+  border-width: var(--avatar-status-md-border);
+}
+
+.avatar-md .avatar-status::after {
+  width: var(--avatar-status-md-dot);
+  height: var(--avatar-status-md-dot);
+}
+
+.avatar-lg .avatar-status {
+  width: var(--avatar-status-lg-size);
+  height: var(--avatar-status-lg-size);
+  border-width: var(--avatar-status-lg-border);
+}
+
+.avatar-lg .avatar-status::after {
+  width: var(--avatar-status-lg-dot);
+  height: var(--avatar-status-lg-dot);
+}
+
+.avatar-xl .avatar-status {
+  width: var(--avatar-status-xl-size);
+  height: var(--avatar-status-xl-size);
+  border-width: var(--avatar-status-xl-border);
+}
+
+.avatar-xl .avatar-status::after {
+  width: var(--avatar-status-xl-dot);
+  height: var(--avatar-status-xl-dot);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AVATAR — Accent color backgrounds
+   For initials avatars, different accent colors for variety.
+   ═══════════════════════════════════════════════════════════ */
+
+.avatar-accent-1 { background-color: var(--color-accent-500); }
+.avatar-accent-2 { background-color: var(--color-accent-600); }
+.avatar-accent-3 { background-color: var(--color-accent-700); }
+.avatar-accent-4 { background-color: var(--color-accent-800); }
+.avatar-accent-5 { background-color: var(--color-accent-900); }
+.avatar-accent-6 { background-color: var(--color-accent-400); }
+
+/* ═══════════════════════════════════════════════════════════
+   AVATAR GROUP — Base
+   ═══════════════════════════════════════════════════════════ */
+
+.avatar-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.avatar-group-item {
+  display: inline-flex;
+  position: relative;
+}
+
+/* Negative margin overlap — first item has no margin */
+.avatar-group-item + .avatar-group-item {
+  margin-left: var(--avatar-group-md-overlap);
+}
+
+/* Border between overlapping avatars */
+.avatar-group .avatar {
+  border: var(--border-width-2) solid var(--avatar-group-border);
+  transition: transform var(--duration-fast) var(--ease-out),
+              z-index var(--duration-fast) var(--ease-out);
+}
+
+/* Hover lifts the avatar slightly */
+.avatar-group .avatar:hover {
+  transform: translateY(var(--avatar-group-hover-lift));
+  z-index: var(--z-raised);
+}
+
+/* ── Group sizes ────────────────────────────────────────── */
+.avatar-group-sm .avatar {
+  width: var(--space-8);
+  height: var(--space-8);
+}
+
+.avatar-group-sm .avatar .avatar-initials {
+  font-size: var(--text-xs);
+}
+
+.avatar-group-sm .avatar .avatar-fallback {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.avatar-group-sm .avatar-group-item + .avatar-group-item {
+  margin-left: var(--avatar-group-sm-overlap);
+}
+
+.avatar-group-md .avatar {
+  width: var(--space-10);
+  height: var(--space-10);
+}
+
+.avatar-group-md .avatar .avatar-initials {
+  font-size: var(--text-sm);
+}
+
+.avatar-group-md .avatar .avatar-fallback {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.avatar-group-md .avatar-group-item + .avatar-group-item {
+  margin-left: var(--avatar-group-md-overlap);
+}
+
+.avatar-group-lg .avatar {
+  width: var(--space-14);
+  height: var(--space-14);
+}
+
+.avatar-group-lg .avatar .avatar-initials {
+  font-size: var(--text-lg);
+}
+
+.avatar-group-lg .avatar .avatar-fallback {
+  width: var(--space-7);
+  height: var(--space-7);
+}
+
+.avatar-group-lg .avatar-group-item + .avatar-group-item {
+  margin-left: var(--avatar-group-lg-overlap);
+}
+
+/* ── Group counter (+N) ─────────────────────────────────── */
+.avatar-group-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  color: var(--color-neutral-600);
+  background-color: var(--color-neutral-100);
+  border: var(--border-width-2) solid var(--avatar-group-border);
+  border-radius: var(--radius-pill);
+  line-height: var(--leading-none);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.avatar-group-sm .avatar-group-counter {
+  width: var(--space-8);
+  height: var(--space-8);
+  font-size: var(--text-xs);
+  margin-left: var(--avatar-group-sm-overlap);
+}
+
+.avatar-group-md .avatar-group-counter {
+  width: var(--space-10);
+  height: var(--space-10);
+  font-size: var(--text-sm);
+  margin-left: var(--avatar-group-md-overlap);
+}
+
+.avatar-group-lg .avatar-group-counter {
+  width: var(--space-14);
+  height: var(--space-14);
+  font-size: var(--text-sm);
+  margin-left: var(--avatar-group-lg-overlap);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AVATAR — Hover tooltip (optional)
+   ═══════════════════════════════════════════════════════════ */
+
+.avatar[data-tooltip] {
+  cursor: default;
+}
+
+.avatar[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + var(--space-2));
+  left: 50%;
+  transform: translateX(-50%) translateY(var(--avatar-tooltip-offset-y));
+  padding: var(--space-0-5) var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  font-family: var(--font-sans);
+  color: var(--color-neutral-50);
+  background-color: var(--color-neutral-800);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-in-out),
+              transform var(--duration-fast) var(--ease-out);
+  z-index: var(--z-dropdown);
+}
+
+.avatar[data-tooltip]:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONTEXTUAL: Avatar with badge (for badge.html showcase)
+   ═══════════════════════════════════════════════════════════ */
+
+.avatar-badge {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-neutral-200);
+  color: var(--color-neutral-600);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  font-family: var(--font-sans);
+  line-height: var(--leading-none);
+}
+
+.avatar-circle-lg {
+  width: var(--space-12);
+  height: var(--space-12);
+  font-size: var(--text-base);
+}
