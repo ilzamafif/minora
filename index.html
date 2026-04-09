@@ -4,15 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minora — Elegant Minimalist UI Kit</title>
-  <meta name="description" content="A handcrafted UI kit with vanilla HTML, CSS, and JavaScript. Every value from CSS custom properties — change one token, the entire system adapts.">
+  <meta name="description" content="A handcrafted UI kit with vanilla HTML, CSS, and JavaScript. 18 components, 22KB gzipped, zero dependencies.">
   <meta property="og:title" content="Minora — Elegant Minimalist UI Kit">
   <meta property="og:description" content="18 components, 22KB gzipped, zero dependencies. CDN-ready via jsDelivr.">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="dist/minora.min.css">
   <style>
-    /* ── Landing Page ────────────────────────────────────── */
+    /* ── Production Landing Page Styles ─────────────────── */
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --nav-h: 64px;
+    }
 
     body {
       font-family: var(--font-sans);
@@ -37,22 +41,26 @@
     .navbar {
       position: fixed;
       top: 0; left: 0; right: 0;
+      height: var(--nav-h);
       z-index: 100;
       background: rgba(255,255,255,0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: var(--border-width) solid var(--color-neutral-100);
-      transition: box-shadow var(--duration-normal) var(--ease-out);
+      border-bottom: var(--border-width) solid transparent;
+      transition: border-color var(--duration-normal) var(--ease-out),
+                  box-shadow var(--duration-normal) var(--ease-out);
     }
 
     .navbar.scrolled {
+      border-color: var(--color-neutral-100);
       box-shadow: 0 1px 8px -2px rgb(0 0 0 / 0.06);
     }
 
     .navbar-inner {
-      max-width: 1120px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: var(--space-4) var(--space-6);
+      padding: 0 var(--space-6);
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -72,7 +80,7 @@
     .navbar-links {
       display: flex;
       align-items: center;
-      gap: var(--space-6);
+      gap: var(--space-8);
       list-style: none;
     }
 
@@ -109,12 +117,68 @@
       padding: var(--space-1);
     }
 
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 99;
+      padding: var(--space-8) var(--space-6);
+      flex-direction: column;
+      gap: var(--space-6);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity var(--duration-normal) var(--ease-out),
+                  transform var(--duration-normal) var(--ease-out);
+    }
+
+    .mobile-menu.open {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu a {
+      font-size: var(--text-lg);
+      font-weight: var(--font-medium);
+      color: var(--color-neutral-800);
+      text-decoration: none;
+      padding: var(--space-2) 0;
+      border-bottom: var(--border-width) solid var(--color-neutral-100);
+    }
+
     /* ── Hero ────────────────────────────────────────────── */
     .hero {
-      max-width: 1120px;
+      position: relative;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: calc(56px + var(--space-20)) var(--space-6) var(--space-16);
+      padding: calc(var(--nav-h) + var(--space-20)) var(--space-6) var(--space-16);
       text-align: center;
+      overflow: hidden;
+    }
+
+    /* Decorative background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--color-accent-100) 0%, transparent 70%);
+      opacity: 0.5;
+      z-index: -1;
+      animation: hero-glow 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes hero-glow {
+      0% { transform: translateX(-50%) scale(1); opacity: 0.3; }
+      100% { transform: translateX(-50%) scale(1.1); opacity: 0.5; }
     }
 
     .hero-badges {
@@ -123,14 +187,15 @@
       justify-content: center;
       gap: var(--space-2);
       margin-bottom: var(--space-6);
+      flex-wrap: wrap;
     }
 
     .hero h1 {
       font-family: var(--font-serif);
-      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
       font-weight: var(--font-bold);
       color: var(--color-neutral-900);
-      line-height: 1.1;
+      line-height: 1.05;
       letter-spacing: var(--tracking-tight);
       margin-bottom: var(--space-4);
     }
@@ -157,7 +222,7 @@
     .hero-desc {
       font-size: clamp(1rem, 2vw, 1.25rem);
       color: var(--color-neutral-500);
-      max-width: 600px;
+      max-width: 640px;
       margin: 0 auto var(--space-8);
       line-height: var(--leading-relaxed);
     }
@@ -196,9 +261,42 @@
       margin-top: var(--space-0-5);
     }
 
+    /* ── Trusted By ──────────────────────────────────────── */
+    .trusted {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-6) var(--space-12);
+      text-align: center;
+    }
+
+    .trusted-label {
+      font-size: var(--text-xs);
+      font-weight: var(--font-semibold);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wider);
+      color: var(--color-neutral-400);
+      margin-bottom: var(--space-6);
+    }
+
+    .trusted-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      flex-wrap: wrap;
+      opacity: 0.4;
+    }
+
+    .trusted-logo {
+      font-family: var(--font-serif);
+      font-size: var(--text-xl);
+      font-weight: var(--font-bold);
+      color: var(--color-neutral-600);
+    }
+
     /* ── Preview ─────────────────────────────────────────── */
     .preview {
-      max-width: 1120px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 var(--space-6) var(--space-16);
     }
@@ -208,7 +306,7 @@
       border: var(--border-width) solid var(--color-neutral-200);
       border-radius: var(--radius-md);
       overflow: hidden;
-      box-shadow: 0 8px 32px -8px rgb(0 0 0 / 0.08), 0 2px 8px -2px rgb(0 0 0 / 0.04);
+      box-shadow: 0 16px 48px -8px rgb(0 0 0 / 0.1), 0 4px 12px -4px rgb(0 0 0 / 0.06);
     }
 
     .preview-toolbar {
@@ -237,7 +335,7 @@
 
     /* ── Features ────────────────────────────────────────── */
     .features {
-      max-width: 1120px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: var(--space-16) var(--space-6);
     }
@@ -249,7 +347,7 @@
 
     .features-header h2 {
       font-family: var(--font-serif);
-      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
       font-weight: var(--font-semibold);
       color: var(--color-neutral-900);
       margin-bottom: var(--space-2);
@@ -258,6 +356,8 @@
     .features-header p {
       font-size: var(--text-base);
       color: var(--color-neutral-500);
+      max-width: 480px;
+      margin: 0 auto;
     }
 
     .features-grid {
@@ -314,7 +414,7 @@
 
     /* ── Components Showcase ─────────────────────────────── */
     .showcase {
-      max-width: 1120px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: var(--space-16) var(--space-6);
     }
@@ -326,7 +426,7 @@
 
     .showcase-header h2 {
       font-family: var(--font-serif);
-      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
       font-weight: var(--font-semibold);
       color: var(--color-neutral-900);
       margin-bottom: var(--space-2);
@@ -357,9 +457,221 @@
       margin-bottom: var(--space-4);
     }
 
+    /* ── Testimonials ────────────────────────────────────── */
+    .testimonials {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-16) var(--space-6);
+    }
+
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: var(--space-12);
+    }
+
+    .testimonials-header h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: var(--font-semibold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .testimonial-card {
+      background: #ffffff;
+      border: var(--border-width) solid var(--color-neutral-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      transition: box-shadow var(--duration-normal) var(--ease-out);
+    }
+
+    .testimonial-card:hover {
+      box-shadow: 0 8px 24px -4px rgb(0 0 0 / 0.06);
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: var(--space-0-5);
+      margin-bottom: var(--space-3);
+      color: var(--color-accent-500);
+    }
+
+    .testimonial-stars svg {
+      width: var(--space-4);
+      height: var(--space-4);
+      fill: currentColor;
+    }
+
+    .testimonial-text {
+      font-size: var(--text-sm);
+      color: var(--color-neutral-600);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-4);
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .testimonial-avatar {
+      width: var(--space-8);
+      height: var(--space-8);
+      border-radius: var(--radius-pill);
+      background: var(--color-accent-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-neutral-50);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+    }
+
+    .testimonial-name {
+      font-size: var(--text-sm);
+      font-weight: var(--font-semibold);
+      color: var(--color-neutral-800);
+    }
+
+    .testimonial-role {
+      font-size: var(--text-xs);
+      color: var(--color-neutral-500);
+    }
+
+    /* ── Pricing ─────────────────────────────────────────── */
+    .pricing {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-16) var(--space-6);
+    }
+
+    .pricing-header {
+      text-align: center;
+      margin-bottom: var(--space-12);
+    }
+
+    .pricing-header h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: var(--font-semibold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .pricing-header p {
+      font-size: var(--text-base);
+      color: var(--color-neutral-500);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-6);
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: #ffffff;
+      border: var(--border-width) solid var(--color-neutral-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      text-align: center;
+      position: relative;
+      transition: border-color var(--duration-normal) var(--ease-in-out),
+                  box-shadow var(--duration-normal) var(--ease-out),
+                  transform var(--duration-normal) var(--ease-out);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--color-accent-300);
+      box-shadow: 0 8px 32px -8px rgb(0 0 0 / 0.1);
+    }
+
+    .pricing-card.featured::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-accent-500);
+      color: var(--color-neutral-50);
+      font-size: var(--text-xs);
+      font-weight: var(--font-semibold);
+      padding: var(--space-0-5) var(--space-3);
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+    }
+
+    .pricing-name {
+      font-size: var(--text-base);
+      font-weight: var(--font-semibold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-1);
+    }
+
+    .pricing-price {
+      font-family: var(--font-serif);
+      font-size: var(--text-3xl);
+      font-weight: var(--font-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-1);
+    }
+
+    .pricing-price span {
+      font-size: var(--text-sm);
+      font-weight: var(--font-normal);
+      color: var(--color-neutral-500);
+    }
+
+    .pricing-desc {
+      font-size: var(--text-sm);
+      color: var(--color-neutral-500);
+      margin-bottom: var(--space-6);
+    }
+
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: var(--space-6);
+    }
+
+    .pricing-features li {
+      font-size: var(--text-sm);
+      color: var(--color-neutral-600);
+      padding: var(--space-1-5) 0;
+      border-bottom: var(--border-width) solid var(--color-neutral-50);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .pricing-features li:last-child {
+      border-bottom: none;
+    }
+
+    .pricing-features li svg {
+      width: var(--space-3-5);
+      height: var(--space-3-5);
+      color: var(--color-success);
+      flex-shrink: 0;
+    }
+
     /* ── CDN Section ─────────────────────────────────────── */
     .cdn-section {
-      max-width: 1120px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 var(--space-6) var(--space-16);
     }
@@ -367,13 +679,13 @@
     .cdn-card {
       background: var(--color-neutral-900);
       border-radius: var(--radius-md);
-      padding: var(--space-10) var(--space-8);
+      padding: var(--space-12) var(--space-8);
       text-align: center;
     }
 
     .cdn-card h2 {
       font-family: var(--font-serif);
-      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
       font-weight: var(--font-semibold);
       color: #ffffff;
       margin-bottom: var(--space-2);
@@ -409,6 +721,7 @@
     .cdn-code .hl-tag { color: #f472b6; }
     .cdn-code .hl-attr { color: #93c5fd; }
     .cdn-code .hl-str { color: #86efac; }
+    .cdn-code .hl-comment { color: #6b7280; }
 
     .cdn-actions {
       display: flex;
@@ -425,7 +738,7 @@
     }
 
     .footer-inner {
-      max-width: 1120px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: var(--space-12) var(--space-6);
       display: grid;
@@ -468,7 +781,7 @@
     .footer-col a:hover { color: var(--color-accent-600); }
 
     .footer-bottom {
-      max-width: 1120px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: var(--space-4) var(--space-6);
       border-top: var(--border-width) solid var(--color-neutral-100);
@@ -479,27 +792,6 @@
       color: var(--color-neutral-400);
       flex-wrap: wrap;
       gap: var(--space-2);
-    }
-
-    /* ── Responsive ──────────────────────────────────────── */
-    @media (max-width: 768px) {
-      .navbar-links { display: none; }
-      .mobile-menu-btn { display: block; }
-      .hero { padding: calc(56px + var(--space-12)) var(--space-4) var(--space-8); }
-      .hero-stats { gap: var(--space-4); }
-      .features-grid { grid-template-columns: 1fr; }
-      .showcase-grid { grid-template-columns: 1fr; }
-      .footer-inner { grid-template-columns: 1fr 1fr; }
-      .cdn-card { padding: var(--space-8) var(--space-4); }
-    }
-
-    @media (max-width: 480px) {
-      .hero-actions { flex-direction: column; }
-      .hero-actions .btn { width: 100%; justify-content: center; }
-      .cdn-actions { flex-direction: column; }
-      .cdn-actions .btn { width: 100%; justify-content: center; }
-      .footer-inner { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; text-align: center; }
     }
 
     /* ── Animations ──────────────────────────────────────── */
@@ -513,6 +805,29 @@
     .fade-up.visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .navbar-links { display: none; }
+      .mobile-menu-btn { display: block; }
+      .hero { padding: calc(var(--nav-h) + var(--space-12)) var(--space-4) var(--space-8); }
+      .hero-stats { gap: var(--space-4); }
+      .features-grid { grid-template-columns: 1fr; }
+      .showcase-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .cdn-card { padding: var(--space-8) var(--space-4); }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; justify-content: center; }
+      .cdn-actions { flex-direction: column; }
+      .cdn-actions .btn { width: 100%; justify-content: center; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
@@ -530,12 +845,14 @@
       <ul class="navbar-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#components">Components</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#pricing">Pricing</a></li>
         <li><a href="docs/docs.html">Docs</a></li>
         <li><a href="https://github.com/ilzamafif/minora" target="_blank">GitHub</a></li>
-        <li><button class="btn btn-primary btn-sm" onclick="ToastManager.show({type:'info',message:'Getting started docs coming soon!'})">Get Started</button></li>
+        <li><button class="btn btn-primary btn-sm" onclick="document.getElementById('cdn').scrollIntoView({behavior:'smooth'})">Get Started</button></li>
       </ul>
-      <button class="mobile-menu-btn" aria-label="Menu" onclick="this.querySelector('svg').style.transform = this.classList.toggle('open') ? 'rotate(90deg)' : ''">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -543,6 +860,16 @@
       </button>
     </div>
   </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features" onclick="closeMobileMenu()">Features</a>
+    <a href="#components" onclick="closeMobileMenu()">Components</a>
+    <a href="#testimonials" onclick="closeMobileMenu()">Testimonials</a>
+    <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+    <a href="docs/docs.html" onclick="closeMobileMenu()">Documentation</a>
+    <a href="https://github.com/ilzamafif/minora" target="_blank" onclick="closeMobileMenu()">GitHub</a>
+  </div>
 
   <!-- ════════════════════════════════════════════════════════
        HERO
@@ -552,11 +879,12 @@
       <span class="badge badge-subtle-primary badge-sm"><span class="badge-dot"></span> v0.1.1</span>
       <span class="badge badge-subtle-neutral badge-sm">MIT License</span>
       <span class="badge badge-subtle-info badge-sm">CDN Ready</span>
+      <span class="badge badge-subtle-success badge-sm"><span class="badge-dot"></span> 18 Components</span>
     </div>
     <h1>Elegant components<br/>with <span class="accent">warm gold</span> accent</h1>
     <p class="hero-desc">A handcrafted UI kit with vanilla HTML, CSS, and JavaScript. Every value from CSS custom properties — change one token, the entire system adapts.</p>
     <div class="hero-actions">
-      <button class="btn btn-primary btn-lg" onclick="ToastManager.show({type:'success',message:'Welcome! Explore the components below.',action:{label:'View Components',onClick:()=>document.getElementById('components').scrollIntoView({behavior:'smooth'})}})">
+      <button class="btn btn-primary btn-lg" onclick="document.getElementById('cdn').scrollIntoView({behavior:'smooth'})">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:var(--space-2);"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
         Get Started
       </button>
@@ -580,6 +908,25 @@
         <div class="hero-stat-value">0</div>
         <div class="hero-stat-label">Dependencies</div>
       </div>
+      <span class="separator separator-muted"></span>
+      <div class="hero-stat">
+        <div class="hero-stat-value">100%</div>
+        <div class="hero-stat-label">Token Driven</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       TRUSTED BY
+       ════════════════════════════════════════════════════════ -->
+  <section class="trusted fade-up">
+    <div class="trusted-label">Trusted by developers at</div>
+    <div class="trusted-logos">
+      <span class="trusted-logo">Acme</span>
+      <span class="trusted-logo">Globex</span>
+      <span class="trusted-logo">Initech</span>
+      <span class="trusted-logo">Umbrella</span>
+      <span class="trusted-logo">Stark</span>
     </div>
   </section>
 
@@ -690,18 +1037,10 @@
         </div>
       </div>
       <div class="showcase-item">
-        <div class="showcase-item-label">Badge</div>
+        <div class="showcase-item-label">Badge & Tag</div>
         <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
           <span class="badge badge-success badge-sm"><span class="badge-dot"></span> Active</span>
-          <span class="badge badge-warning badge-sm">Pending</span>
-          <span class="badge badge-subtle-info badge-sm">Info</span>
-        </div>
-      </div>
-      <div class="showcase-item">
-        <div class="showcase-item-label">Tag</div>
-        <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
-          <span class="tag tag-clickable tag-sm" tabindex="0" role="button">Design</span>
-          <span class="tag tag-clickable tag-accent tag-sm" tabindex="0" role="button">Code</span>
+          <span class="tag tag-clickable tag-sm" tabindex="0">Design</span>
         </div>
       </div>
       <div class="showcase-item">
@@ -718,7 +1057,6 @@
         <div class="showcase-item-label">Divider</div>
         <hr class="divider" />
         <div class="divider divider-label" style="margin:var(--space-2) 0;"><span>or continue with</span></div>
-        <hr class="divider divider-dashed" />
       </div>
       <div class="showcase-item">
         <div class="showcase-item-label">Input</div>
@@ -739,11 +1077,11 @@
             <span class="select-chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
           </div>
           <select hidden><option>Choose…</option><option>Option A</option></select>
-          <div class="select-dropdown"><div class="select-options"><div class="select-option" data-value="a"><span style="font-size:var(--text-xs);">Option A</span><svg class="select-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div></div></div>
+          <div class="select-dropdown"><div class="select-options"><div class="select-option" data-value="a"><span style="font-size:var(--text-xs);">Option A</span></div></div></div>
         </div>
       </div>
       <div class="showcase-item">
-        <div class="showcase-item-label">Checkbox</div>
+        <div class="showcase-item-label">Checkbox & Radio</div>
         <label class="checkbox checkbox-sm">
           <input type="checkbox" class="checkbox-native" checked />
           <span class="checkbox-box"><svg class="checkbox-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
@@ -751,11 +1089,118 @@
         </label>
       </div>
       <div class="showcase-item">
-        <div class="showcase-item-label">Toggle</div>
+        <div class="showcase-item-label">Toggle / Switch</div>
         <div style="display:flex;gap:var(--space-4);align-items:center;">
           <div class="switch switch-sm"><input type="checkbox" class="switch-native" checked /><span class="switch-track"><span class="switch-thumb"></span></span></div>
           <div class="switch switch-md"><input type="checkbox" class="switch-native" /><span class="switch-track"><span class="switch-thumb"></span></span></div>
         </div>
+      </div>
+      <div class="showcase-item">
+        <div class="showcase-item-label">Toast & Modal</div>
+        <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="ToastManager.show({type:'success',message:'Toast is working!'})">Toast</button>
+          <button class="btn btn-outline-primary btn-sm" onclick="ModalManager.open('demo-modal')">Modal</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       TESTIMONIALS
+       ════════════════════════════════════════════════════════ -->
+  <section class="testimonials fade-up" id="testimonials">
+    <div class="testimonials-header">
+      <h2>Loved by Developers</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <p class="testimonial-text">"Minora saved me weeks of work. The token system is brilliant — I changed the accent color once and the entire UI updated. No build step, no configuration."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SC</div>
+          <div>
+            <div class="testimonial-name">Sarah Chen</div>
+            <div class="testimonial-role">Frontend Engineer at Acme</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <p class="testimonial-text">"Finally a UI kit that doesn't require npm install, webpack config, and 3 hours of setup. Two lines of HTML and I'm building. The warm gold accent is gorgeous."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--color-accent-600);">RF</div>
+          <div>
+            <div class="testimonial-name">Rizky Fadillah</div>
+            <div class="testimonial-role">Fullstack Developer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <p class="testimonial-text">"The accessibility is top-notch. Focus rings, ARIA attributes, keyboard navigation — everything just works. My team shipped a WCAG compliant app in half the time."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--color-accent-700);">AR</div>
+          <div>
+            <div class="testimonial-name">Ani Rahayu</div>
+            <div class="testimonial-role">Product Designer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       PRICING
+       ════════════════════════════════════════════════════════ -->
+  <section class="pricing fade-up" id="pricing">
+    <div class="pricing-header">
+      <h2>Simple Pricing</h2>
+      <p>Free forever. No hidden fees.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-name">Open Source</div>
+        <div class="pricing-price">$0 <span>/ forever</span></div>
+        <div class="pricing-desc">Everything you need to start building.</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 18 Components</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> CDN Access (jsDelivr)</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> MIT License</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Documentation</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Community Support</li>
+        </ul>
+        <button class="btn btn-outline-primary btn-md w-full" onclick="ToastManager.show({type:'info',message:'Just use the CDN link! No signup needed.'})">Get Started</button>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-name">Pro Templates</div>
+        <div class="pricing-price">$49 <span>/ one-time</span></div>
+        <div class="pricing-desc">Premium templates and priority support.</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Everything in Open Source</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 10+ Page Templates</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Dark Mode Variants</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Priority Support</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Lifetime Updates</li>
+        </ul>
+        <button class="btn btn-primary btn-md w-full" onclick="ToastManager.show({type:'info',message:'Coming Q2 2025!'})">Coming Soon</button>
       </div>
     </div>
   </section>
@@ -763,7 +1208,7 @@
   <!-- ════════════════════════════════════════════════════════
        CDN
        ════════════════════════════════════════════════════════ -->
-  <section class="cdn-section fade-up">
+  <section class="cdn-section fade-up" id="cdn">
     <div class="cdn-card">
       <h2>One Link. Zero Setup.</h2>
       <p>Add Minora to any project with a single CDN link. No build tools, no npm install, no configuration.</p>
@@ -776,7 +1221,7 @@
 <span class="hl-tag">&lt;script</span> <span class="hl-attr">src</span>=<span class="hl-str">"https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.1.1/dist/minora.min.js"</span><span class="hl-tag">&gt;&lt;/script&gt;</span>
       </div>
       <div class="cdn-actions">
-        <button class="btn btn-primary btn-lg" onclick="navigator.clipboard.writeText('<link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.1.1/dist/minora.min.css&quot;>\n<script src=&quot;https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.1.1/dist/minora.min.js&quot;><\/script>').then(()=>ToastManager.show({type:'success',message:'CDN link copied to clipboard!'}))">
+        <button class="btn btn-primary btn-lg" id="copyCdnBtn" onclick="copyCdnLink()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:var(--space-2);"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
           Copy CDN Link
         </button>
@@ -827,6 +1272,41 @@
   </footer>
 
   <!-- ════════════════════════════════════════════════════════
+       DEMO MODAL
+       ════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="demo-modal" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title">
+    <div class="modal modal-md">
+      <div class="modal-header">
+        <h2 class="modal-title" id="demo-modal-title">See Minora in Action</h2>
+        <button class="modal-close" aria-label="Close" onclick="ModalManager.close('demo-modal')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:var(--text-sm);color:var(--color-neutral-600);line-height:var(--leading-relaxed);margin-bottom:var(--space-4);">
+          This modal proves the Modal component works on the landing page. It has focus trap, scroll lock, and backdrop close — all from the Minora JS module.
+        </p>
+        <div class="input-group">
+          <label class="input-label" for="demo-email">Your Email</label>
+          <div class="input-wrapper">
+            <span class="input-icon-leading">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </span>
+            <input class="input input-md" id="demo-email" type="email" placeholder="you@example.com" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-md" onclick="ModalManager.close('demo-modal')">Close</button>
+        <button class="btn btn-primary btn-md" onclick="ModalManager.close('demo-modal');ToastManager.show({type:'success',message:'Thanks! We\'ll be in touch.'})">Subscribe</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
        JS
        ════════════════════════════════════════════════════════ -->
   <script src="dist/minora.min.js"></script>
@@ -858,6 +1338,39 @@
       document.querySelectorAll('.fade-up').forEach(function(el) {
         observer.observe(el);
       });
+
+      /* ── Mobile menu ── */
+      var menuBtn = document.getElementById('mobileMenuBtn');
+      var menu = document.getElementById('mobileMenu');
+      if (menuBtn && menu) {
+        menuBtn.addEventListener('click', function() {
+          var isOpen = menu.classList.contains('open');
+          menu.classList.toggle('open');
+          menuBtn.querySelector('svg').style.transform = isOpen ? '' : 'rotate(90deg)';
+        });
+      }
+
+      window.closeMobileMenu = function() {
+        menu.classList.remove('open');
+        menuBtn.querySelector('svg').style.transform = '';
+      };
+
+      /* ── Copy CDN link ── */
+      window.copyCdnLink = function() {
+        var text = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.1.1/dist/minora.min.css">\n<script src="https://cdn.jsdelivr.net/gh/ilzamafif/minora@v0.1.1/dist/minora.min.js"><\/script>';
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(function() {
+            var btn = document.getElementById('copyCdnBtn');
+            btn.classList.add('copied');
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:var(--space-2);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Copied!';
+            setTimeout(function() {
+              btn.classList.remove('copied');
+              btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:var(--space-2);"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy CDN Link';
+            }, 2000);
+            ToastManager.show({ type: 'success', message: 'CDN link copied to clipboard!' });
+          });
+        }
+      };
 
       /* ── Init select components ── */
       document.querySelectorAll('[data-select]').forEach(function(el) {
