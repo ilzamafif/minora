@@ -2,7 +2,7 @@
 
 'use strict';
 
-/* ─── src\js\C:\DEV\minora\src\js\modal.js ─── */
+/* ─── src/js/modal.js ─── */
 /**
  * Minora — Modal Manager
  * ──────────────────────
@@ -132,7 +132,7 @@
 })();
 
 
-/* ─── src\js\C:\DEV\minora\src\js\select.js ─── */
+/* ─── src/js/select.js ─── */
 /**
  * Minora — Select & Multiselect Manager
  * ─────────────────────────────────────
@@ -407,7 +407,7 @@
 })();
 
 
-/* ─── src\js\C:\DEV\minora\src\js\toast.js ─── */
+/* ─── src/js/toast.js ─── */
 /**
  * Minora — Toast Manager
  * ──────────────────────
@@ -550,7 +550,7 @@
 })();
 
 
-/* ─── src\js\C:\DEV\minora\src\js\tooltip.js ─── */
+/* ─── src/js/tooltip.js ─── */
 /**
  * Minora — Tooltip & Popover Manager
  * ───────────────────────────────────
