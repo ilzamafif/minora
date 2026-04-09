@@ -1,6 +1,6 @@
 {
   "name": "minora",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Elegant minimalist UI kit — clean components with warm gold accent, zero dependencies, CDN-ready",
   "main": "dist/minora.css",
   "style": "dist/minora.css",
